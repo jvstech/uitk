@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\win32">
+      <UniqueIdentifier>{7e587f60-f23f-42b1-826e-2ef88b1c1c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\win32\[Events]">
+      <UniqueIdentifier>{38eb7360-c1d5-4cfc-939b-d02ae1b3b456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\win32\[Events]\[Consumers]">
+      <UniqueIdentifier>{a7c9fef6-8079-40f6-b5af-6fc78b2eb8e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\win32\[Events]\[Arguments]">
+      <UniqueIdentifier>{547f1517-8d82-464f-8c3b-8dc697dea1d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\win32\[Directives]">
+      <UniqueIdentifier>{d879b232-4d59-4df4-a408-9b2a254da853}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\brush.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\button.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\color.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\component.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\component_creation.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\component_msghandler.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\cursor.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\font.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\frame.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\graphics.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\keyboard.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\label.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\list.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\point.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\rectangle.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\sizedstruct.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win32error.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\uitk.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="uitk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\textbox.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\component_alignment_directives.h">
+      <Filter>Header Files\win32\[Directives]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\directive.h">
+      <Filter>Header Files\win32\[Directives]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\types.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="anchor_alignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="anchor_styles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="background_mode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bounds_changed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="component_states.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="content_alignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dock_position.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="event_arguments.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="event_consumer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="event_provider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="flag_states.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="null_deleter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="position_alignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="smart_ptr_compare.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="variadic_function_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\gdi_object_deleter.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\component_directives.h">
+      <Filter>Header Files\win32\[Directives]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\focus_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\frame_closing_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\frame_close_reason.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\message_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\input_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\key_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\frame_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\frame_state.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\mouse_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\mouse_button.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\component_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\focus_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\frame_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\key_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\mouse_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\mouse_motion_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\mouse_wheel_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\mouse_wheel_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\default_layout.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\layout_engine.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\frame_states.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\key_state.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\message_id.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\simple_message_loop.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\cursor_type.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\handle_deleter.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\component_creation_parameters.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\application_entry_point.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\size.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
