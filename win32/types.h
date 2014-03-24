@@ -7,7 +7,6 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include <jvs/base/counted_value.h>
 
 namespace jvs
 {
@@ -37,11 +36,6 @@ typedef LPARAM Int32ParameterType;
 typedef MSG MessageType;
 typedef UINT UIntType;
 typedef DWORD DWordType;
-
-// Reference counted aliases
-struct GdiObjectDisposer;
-template <typename GdiObjectT>
-using GdiHandle = CountedValue<GdiObjectT, GdiObjectDisposer>;
 
 
 } // namespace win32

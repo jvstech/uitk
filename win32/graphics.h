@@ -12,7 +12,6 @@
 #include "font.h"
 #include "brush.h"
 #include "gdi_object_deleter.h"
-//#include <jvs/base/counted_value.h>
 #include "rectangle.h"
 #include "win32error.h"
 

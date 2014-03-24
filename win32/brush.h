@@ -16,7 +16,7 @@ namespace win32
 class Brush : public ValueWrapper<BrushHandleType>
 {
 private:
-  GdiHandle<BrushHandleType> brush_;
+  BrushHandleType brush_;
   Color color_;
 
 public:
@@ -33,6 +33,7 @@ public:
     : brush_(src.brush_),
     color_(src.color_)
   {
+    this->loadLogicalBrush();
   }
 
   Brush(Brush&& src)
@@ -50,6 +51,10 @@ public:
 
   virtual ~Brush(void)
   {
+    if (this->brush_ != nullptr)
+    {
+      this->dispose();
+    }
   }
 
   BrushHandleType get_Value(void) const override
@@ -65,13 +70,18 @@ public:
   }
 
 private:
+  void dispose(void)
+  {
+    GdiObjectDisposer::Dispose(this->brush_);
+    this->brush_ = nullptr;
+  }
+
   void loadLogicalBrush(void)
   {
     LogicalBrushType lb;
     ::GetObject(this->brush_, sizeof(lb), &lb);
     // Duplicate the brush
     this->brush_ = ::CreateBrushIndirect(&lb);
-    this->Assign(lb.lbColor);
   }
 };
 

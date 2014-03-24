@@ -9,7 +9,6 @@
 #include <Windows.h>
 
 #include <jvs/base/types.h>
-//#include <jvs/base/counted_value.h>
 #include <jvs/uitk/win32/types.h>
 #include "gdi_object_deleter.h"
 #include "win32error.h"
@@ -25,7 +24,6 @@ class Font
 {
 private:
   FontHandleType handle_;
-  //bool original_;
   String face_;
   float size_;
   bool bold_;
@@ -41,7 +39,6 @@ public:
 
   Font(void)
     : handle_(nullptr),
-    //original_(true),
     face_(),
     size_(0.0f),
     bold_(false),
@@ -54,7 +51,6 @@ public:
 
   Font(const Font& src)
     : handle_(src.handle_),
-    //original_(src.original_),
     face_(src.face_),
     size_(src.size_),
     bold_(src.bold_),
@@ -62,13 +58,11 @@ public:
     underline_(src.underline_),
     strikethru_(src.strikethru_)
   {
-    //this->recreateIfOriginal();
     this->loadFont();
   }
 
   Font(Font&& src)
     : handle_(src.handle_),
-    //original_(src.original_),
     face_(std::move(src.face_)),
     size_(src.size_),
     bold_(src.bold_),
@@ -83,7 +77,6 @@ public:
     bool italic = false, bool underline = false, 
     bool strikethru = false)
     : handle_(nullptr),
-    //original_(true),
     face_(face), 
     size_(pointSize), 
     bold_(bold), 
@@ -96,7 +89,6 @@ public:
 
   Font(FontHandleType font) 
     : handle_(font),
-    //original_(false),
     face_(), 
     size_(0.0f), 
     bold_(false), 
@@ -106,9 +98,7 @@ public:
   {
     if (font == nullptr)
     {
-      // throw std::runtime_error("Font handle was null");
       this->handle_ = Font::Default;
-      //return;
     }
 
     this->loadFont();
@@ -124,14 +114,6 @@ public:
     if (src.handle_ != this->handle_)
     {
       this->handle_ = src.handle_;
-      //this->original_ = src.original_;
-      //this->face_ = src.face_;
-      //this->size_ = src.size_;
-      //this->bold_ = src.bold_;
-      //this->italic_ = src.italic_;
-      //this->underline_ = src.underline_;
-      //this->strikethru_ = src.strikethru_;
-      //this->recreateIfOriginal();
       this->loadFont();
     }
 
@@ -141,14 +123,12 @@ public:
   Font& Assign(Font&& src)
   {
     this->handle_ = src.handle_;
-    //this->original_ = src.original_;
     this->face_ = std::move(src.face_);
     this->size_ = src.size_;
     this->bold_ = src.bold_;
     this->italic_ = src.italic_;
     this->underline_ = src.underline_;
     this->strikethru_ = src.strikethru_;
-    //this->recreateIfOriginal();
     src.handle_ = nullptr;
     return *this;
   }
@@ -228,7 +208,7 @@ public:
 private:
   void dispose(void)
   {
-    if (this->handle_ != nullptr/* && this->original_*/)
+    if (this->handle_ != nullptr)
     {
       GdiObjectDisposer::Dispose(this->handle_);
     }
@@ -268,7 +248,6 @@ private:
     auto hdc = ::GetDC(nullptr);
     auto pixelSize = ::GetDeviceCaps(hdc, LOGPIXELSY);
     ::ReleaseDC(nullptr, hdc);
-    //this->original_ = false;
     LOGFONT lf;
     if (::GetObject(this->handle_, sizeof(LOGFONT), &lf) == 0)
     {
@@ -286,19 +265,6 @@ private:
     this->underline_ = lf.lfUnderline != FALSE;
     this->strikethru_ = lf.lfStrikeOut != FALSE;
   }
-
-  //bool recreateIfOriginal() 
-  //{
-  //  if (this->original_)
-  //  {
-  //    // re-create the font just in case gets disposed remotely
-  //    this->handle_ = nullptr;
-  //    this->createFont();
-  //    return true;
-  //  }
-
-  //  return false;
-  //}
 
   static FontHandleType* allocateSystemFont(void)
   {

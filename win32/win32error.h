@@ -27,7 +27,7 @@ public:
 
 	virtual ~Win32Error(void)
 	{
-	} // dtor */
+	}
 
 private:
 	static String getMessageFromCode(DWORD errCode) 
@@ -43,18 +43,16 @@ private:
 			ret = errorText;
 			::LocalFree(errorText);
 			errorText = nullptr;
-		} // if (nullptr != errorText) */
+		}
 		else
 		{
 			ret = String("Unknown error (Code: 0x") 
 				+ String::GetHex(errCode) + String(")");
-		} // else [if (nullptr != errorText)] */
+		}
 
 		return ret;
-	} // getMessageFromCode */
-
-
-}; /* class Win32Error */
+	}
+};
 
 } // namespace win32
 } // namespace uitk
