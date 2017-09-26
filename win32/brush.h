@@ -2,9 +2,9 @@
 #if !defined (JVS_UITK_WIN32_BRUSH_H_)
 #define JVS_UITK_WIN32_BRUSH_H_
 
-#include <jvs/base.h>
-#include <jvs/uitk/win32/types.h>
-#include <jvs/uitk/win32/color.h>
+#include "jvs/uitk/base/value_wrapper.h"
+#include "jvs/uitk/win32/types.h"
+#include "jvs/uitk/win32/color.h"
 
 namespace jvs
 {
@@ -13,17 +13,17 @@ namespace uitk
 namespace win32
 {
 
-class Brush : public ValueWrapper<BrushHandleType>
+class Brush : public ValueWrapper<BrushHandle>
 {
 private:
-  BrushHandleType brush_;
+  BrushHandle brush_;
   Color color_;
 
 public:
 
   static const Brush Empty;
 
-  Brush(void)
+  Brush()
     : brush_(nullptr),
     color_(Color::Empty)
   {
@@ -36,20 +36,16 @@ public:
     this->loadLogicalBrush();
   }
 
-  Brush(Brush&& src)
-    : brush_(std::move(src.brush_)),
-    color_(src.color_)
-  {
-  }
+  Brush(Brush&&) = default;
 
-  Brush(BrushHandleType brush)
+  Brush(BrushHandle brush)
     : brush_(brush),
     color_(0)
   {
     this->loadLogicalBrush();
   }
 
-  virtual ~Brush(void)
+  virtual ~Brush()
   {
     if (this->brush_ != nullptr)
     {
@@ -57,7 +53,9 @@ public:
     }
   }
 
-  BrushHandleType get_Value(void) const override
+  Brush& operator=(Brush&&) = default;
+
+  BrushHandle GetValue() const override
   {
     return this->brush_;
   }
@@ -70,22 +68,22 @@ public:
   }
 
 private:
-  void dispose(void)
+  void dispose()
   {
     GdiObjectDisposer::Dispose(this->brush_);
     this->brush_ = nullptr;
   }
 
-  void loadLogicalBrush(void)
+  void loadLogicalBrush()
   {
-    LogicalBrushType lb;
+    LogicalBrush lb{};
     ::GetObject(this->brush_, sizeof(lb), &lb);
     // Duplicate the brush
     this->brush_ = ::CreateBrushIndirect(&lb);
   }
 };
 
-const Brush Brush::Empty = Brush();
+const Brush Brush::Empty{};
 
 }
 }

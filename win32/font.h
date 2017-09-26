@@ -8,8 +8,8 @@
 #include <functional>
 #include <Windows.h>
 
-#include <jvs/base/types.h>
-#include <jvs/uitk/win32/types.h>
+#include "jvs/uitk/base/string.h"
+#include "jvs/uitk/win32/types.h"
 #include "gdi_object_deleter.h"
 #include "win32error.h"
 
@@ -23,21 +23,21 @@ namespace win32
 class Font
 {
 private:
-  FontHandleType handle_;
-  String face_;
+  FontHandle handle_;
+  std::string face_;
   float size_;
   bool bold_;
   bool italic_;
   bool underline_;
   bool strikethru_;
 
-  static const std::unique_ptr<FontHandleType> SystemFontHandle;
+  static const std::unique_ptr<FontHandle> SystemFontHandle;
 
 public:
   
   static const Font Default;
 
-  Font(void)
+  Font()
     : handle_(nullptr),
     face_(),
     size_(0.0f),
@@ -73,7 +73,7 @@ public:
     src.handle_ = nullptr;
   }
 
-  Font(const String& face, float pointSize, bool bold = false, 
+  Font(const std::string& face, float pointSize, bool bold = false,
     bool italic = false, bool underline = false, 
     bool strikethru = false)
     : handle_(nullptr),
@@ -87,7 +87,7 @@ public:
     this->createFont();
   }
 
-  Font(FontHandleType font) 
+  Font(FontHandle font) 
     : handle_(font),
     face_(), 
     size_(0.0f), 
@@ -104,7 +104,7 @@ public:
     this->loadFont();
   }
 
-  virtual ~Font(void)
+  virtual ~Font()
   {
     this->dispose();
   }
@@ -143,70 +143,70 @@ public:
     return this->Assign(std::move(src));
   }
     
-  operator const FontHandleType(void) const
+  operator const FontHandle() const
   {
     return this->handle_;
   }
 
-  const String& get_Face(void) const
+  const std::string& face() const
   {
     return this->face_;
   }
 
-  const FontHandleType handle(void) const
+  const FontHandle handle() const
   {
     return this->handle_;
   }
 
-  float get_Size(void) const
+  float size() const
   {
     return this->size_;
   }
 
-  bool get_Bold(void) const
+  bool bold() const
   {
     return this->bold_;
   }
 
-  bool get_Italic(void) const
+  bool italic() const
   {
     return this->italic_;
   }
 
-  bool get_Underline(void) const
+  bool underline() const
   {
     return this->underline_;
   }
 
-  bool get_StrikeThru(void) const
+  bool strikethru() const
   {
     return this->strikethru_;
   }
 
-  uint32_t GetHeight(void) const
+  uint32_t GetHeight() const
   {
     // TODO: modify this to use GDI+ (see GdipGetFontHeight)
-    TEXTMETRIC tm;
+    TEXTMETRICW tm;
     auto hdc = ::GetDC(nullptr);
-    ::GetTextMetrics(hdc, &tm);
+    ::GetTextMetricsW(hdc, &tm);
     ::ReleaseDC(nullptr, hdc);
     return tm.tmHeight;
   }
 
-  static FontHandleType GetCurrentSystemFontHandle(void)
+  static FontHandle GetCurrentSystemFontHandle()
   {
-    static FontHandleType currentSystemFontHandle = NULL;
-    if (currentSystemFontHandle == NULL)
+    static FontHandle currentSystemFontHandle = nullptr;
+    if (currentSystemFontHandle == nullptr)
     {
-      LOGFONT lf;
-      ::SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, 
+      LOGFONTW lf;
+      ::SystemParametersInfoW(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, 
         SPIF_SENDWININICHANGE);
-      currentSystemFontHandle = ::CreateFontIndirect(&lf);
+      currentSystemFontHandle = ::CreateFontIndirectW(&lf);
     }
   }
 
 private:
-  void dispose(void)
+  void dispose()
   {
     if (this->handle_ != nullptr)
     {
@@ -214,14 +214,14 @@ private:
     }
   }
 
-  void createFont(void)
+  void createFont()
   {
     auto hdc = ::GetDC(nullptr);
     int lfHeight = static_cast<int>((-((this->size_ * ::GetDeviceCaps(hdc, 
       LOGPIXELSY)) / 72)));
     ::ReleaseDC(nullptr, hdc);
 
-    this->handle_ = ::CreateFont(
+    this->handle_ = ::CreateFontW(
       lfHeight,
       0, // width
       0, // escapement
@@ -235,10 +235,10 @@ private:
       CLIP_DEFAULT_PRECIS, 
       CLEARTYPE_QUALITY, 
       VARIABLE_PITCH, 
-      this->face_.c_str());
+      jvs::Widen(this->face_).c_str());
   }
 
-  void loadFont(void)
+  void loadFont()
   {
     if (this->handle_ == nullptr)
     {
@@ -248,8 +248,8 @@ private:
     auto hdc = ::GetDC(nullptr);
     auto pixelSize = ::GetDeviceCaps(hdc, LOGPIXELSY);
     ::ReleaseDC(nullptr, hdc);
-    LOGFONT lf;
-    if (::GetObject(this->handle_, sizeof(LOGFONT), &lf) == 0)
+    LOGFONTW lf;
+    if (::GetObjectW(this->handle_, sizeof(LOGFONTW), &lf) == 0)
     {
       Win32Error error(::GetLastError());
       throw error;
@@ -257,28 +257,28 @@ private:
   
     // Duplicate the font here so it can be disposed by its original owner
     // without causing any aliasing issues
-    this->handle_ = ::CreateFontIndirect(&lf);
-    this->face_ = String(lf.lfFaceName);
-    this->size_ = std::abs((float)(lf.lfHeight * 72 / pixelSize));
+    this->handle_ = ::CreateFontIndirectW(&lf);
+    this->face_ = jvs::Narrow(lf.lfFaceName);
+    this->size_ = std::abs(static_cast<float>(lf.lfHeight * 72 / pixelSize));
     this->bold_ = (lf.lfWeight >= FW_BOLD);
     this->italic_ = lf.lfItalic != FALSE;
     this->underline_ = lf.lfUnderline != FALSE;
     this->strikethru_ = lf.lfStrikeOut != FALSE;
   }
 
-  static FontHandleType* allocateSystemFont(void)
+  static FontHandle* allocateSystemFont()
   {
-    LOGFONT lf;
-    ::SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, NULL);
-    FontHandleType* ret = new FontHandleType;
-    *ret = ::CreateFontIndirect(&lf);
+    LOGFONTW lf;
+    ::SystemParametersInfoW(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, NULL);
+    FontHandle* ret = new FontHandle;
+    *ret = ::CreateFontIndirectW(&lf);
     return ret;
   }
 
 };
 
-const std::unique_ptr<FontHandleType> Font::SystemFontHandle = 
-  std::unique_ptr<FontHandleType>(Font::allocateSystemFont());
+const std::unique_ptr<FontHandle> Font::SystemFontHandle = 
+  std::unique_ptr<FontHandle>(Font::allocateSystemFont());
 
 const Font Font::Default = Font(*Font::SystemFontHandle);
 

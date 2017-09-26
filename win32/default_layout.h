@@ -3,11 +3,11 @@
 #define JVS_UITK_WIN32_DEFAULT_LAYOUT_H_
 
 #include <cstddef>
-#include <jvs/uitk/anchor_styles.h>
+#include "jvs/uitk/anchor_styles.h"
 #include "layout_engine.h"
 #include "rectangle.h"
 
-#include <jvs/debugging/debugkit.h>
+#include "jvs/uitk/debugging/debugkit.h"
 
 namespace jvs
 {
@@ -21,12 +21,12 @@ class DefaultLayout : public LayoutEngine<ComponentT>
 {
 public:
 
-  DefaultLayout(void)
+  DefaultLayout()
     : LayoutEngine()
   {
   }
 
-  virtual ~DefaultLayout(void)
+  virtual ~DefaultLayout()
   {
   }
 
@@ -133,9 +133,9 @@ public:
 
       child.set_bounds(left, top, width, height);
       
-    } // for (int i = 0; i < components.size(); i++)
+    }
   }
-}; // class DefaultLayout
+};
 
 } // namespace win32
 } // namespace uitk

@@ -1,9 +1,8 @@
-
 #if !defined (JVS_UITK_WIN32_MOUSE_WHEEL_EVENT_CONSUMER_H_)
 #define JVS_UITK_WIN32_MOUSE_WHEEL_EVENT_CONSUMER_H_
 
-#include <Windows.h>
-#include <jvs/uitk/event.h>
+#include <windows.h>
+#include "jvs/uitk/event.h"
 #include "component.h"
 #include "message_arguments.h"
 #include "mouse_wheel_event_arguments.h"
@@ -20,9 +19,9 @@ class MouseWheelEventConsumer :
   public virtual MouseEventConsumer
 {
 public:
-  typedef Event<Component&, MouseWheelEventArguments&> MouseWheelEventHandler;
-  typedef MouseEventConsumer::ConsumerType ConsumerType;
-  typedef MouseWheelEventConsumer Type;
+  using MouseWheelEventHandler = Event<Component&, MouseWheelEventArguments&>;
+  using ConsumerType = MouseEventConsumer::ConsumerType;
+  using Type = MouseWheelEventConsumer;
 
 private:
   MouseWheelEventHandler wheelMoved_;
@@ -30,14 +29,14 @@ private:
 public:
   MouseWheelEventHandler& WheelMoved;
 
-  MouseWheelEventConsumer(void)
+  MouseWheelEventConsumer()
     : MouseEventConsumer(),
     wheelMoved_(),
     WheelMoved(wheelMoved_)
   {
   }
 
-  virtual ~MouseWheelEventConsumer(void)
+  virtual ~MouseWheelEventConsumer()
   {
   }
 

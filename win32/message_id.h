@@ -1,57 +1,60 @@
-
 #if !defined (JVS_UITK_WIN32_MESSAGE_ID_H_)
 #define JVS_UITK_WIN32_MESSAGE_ID_H_
 
 #include <windows.h>
-#include <jvs/base/types.h>
-#include <jvs/base/value_wrapper.h>
+#include "jvs/uitk/base/string.h"
+#include "jvs/uitk/base/value_wrapper.h"
 
-namespace jvs { namespace uitk { namespace win32
+namespace jvs 
+{
+namespace uitk
+{
+namespace win32
 {
 
 class MessageId : public virtual ValueWrapper<UINT>
 {
 private:
-  int message_id_;
-  String message_name_;
+  int id_;
+  std::string name_;
 
 public:
 
-  MessageId(void)
-    : message_id_(WM_USER),
-    message_name_("WM_USER")
+  MessageId()
+    : id_(WM_USER),
+    name_("WM_USER")
   {
   }
 
-  MessageId(int message, const String& messageName)
-    : message_id_(message),
-    message_name_(messageName)
+  MessageId(int message, const std::string& messageName)
+    : id_(message),
+    name_(messageName)
   {
   }
 
   MessageId(const MessageId& src)
-    : message_id_(src.message_id_),
-    message_name_(src.message_name_)
+    : id_(src.id_),
+    name_(src.name_)
   {
   }
 
-  virtual ~MessageId(void)
+  virtual ~MessageId()
   {
   }
 
-  UINT get_Value(void) const
+  UINT GetValue() const override
   {
-    return this->message_id_;
+    return this->id_;
   }
 
-  const String& get_Name(void) const
+  const std::string& name() const
   {
-    return this->message_name_;
+    return this->name_;
   }
 
-  operator String(void) const
+  operator std::string() const
   {
-    return this->message_name_;
+    return this->name_;
   }
 
 };

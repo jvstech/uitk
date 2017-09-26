@@ -1,10 +1,9 @@
-
 #if !defined (JVS_UITK_WIN32_MOUSEMOTION_EVENT_CONSUMER_H_)
 #define JVS_UITK_WIN32_MOUSEMOTION_EVENT_CONSUMER_H_
 
 #include <windows.h>
-#include <jvs/uitk/event.h>
-#include <jvs/uitk/event_consumer.h>
+#include "jvs/uitk/event.h"
+#include "jvs/uitk/event_consumer.h"
 #include "component.h"
 #include "message_arguments.h"
 #include "mouse_event_consumer.h"
@@ -32,7 +31,7 @@ public:
   MouseEventConsumer::MouseEventHandler& Dragged;
   MouseEventConsumer::MouseEventHandler& Moved;
 
-  MouseMotionEventConsumer(void)
+  MouseMotionEventConsumer()
     : MouseEventConsumer(),
       dragged_(),
       moved_(),
@@ -41,7 +40,7 @@ public:
   {
   }
 
-  virtual ~MouseMotionEventConsumer(void)
+  virtual ~MouseMotionEventConsumer()
   {
   }
 

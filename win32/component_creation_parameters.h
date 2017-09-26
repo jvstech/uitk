@@ -8,99 +8,211 @@
 #include <sstream>
 #include <cassert>
 
+#include "jvs/uitk/win32/types.h"
+
 #include <jvs/base/types.h>
 
 namespace jvs
 {
-  using jvs::String;
-  using jvs::uitk::StringStream;
+namespace uitk
+{
 
   /// <summary> Used to aide component registration and creation by the system. 
   ///           </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   class ComponentCreationParameters
   {
-  public:
-    HBRUSH BackgroundBrush;
-    String ClassName;
-    UINT ClassStyles;
-    LPCTSTR CursorId;
-    String BaseClassName;
-    bool UseSystemClass;
-    bool UseSystemCursor;
-    DWORD WindowStyles;
-    DWORD WindowExStyles;
-    WNDPROC WindowProc;
+  win32::Atom atom_{0};
+  win32::BrushHandle background_brush_{reinterpret_cast<win32::BrushHandle>(
+    (COLOR_WINDOW + 1))};
+  std::string base_class_name_{};
+  std::wstring base_class_name_buffer_{};
+  std::string class_name_{};
+  std::wstring class_name_buffer_{};
+  win32::UInt class_styles_{CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS};
+  const wchar_t* cursor_id_{IDC_ARROW};
 
-    ComponentCreationParameters(void)
-      : atom_(NULL),
-      BackgroundBrush((HBRUSH)(COLOR_WINDOW + 1)),
-      ClassName(),
-      ClassStyles(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS),
-      CursorId(IDC_ARROW),
-      BaseClassName(),
-      UseSystemClass(false),
-      UseSystemCursor(true),
-      WindowStyles(CControlWinTraits::GetWndStyle(0)),
-      WindowExStyles(CControlWinTraits::GetWndExStyle(0)),
-      WindowProc(NULL)
+  public:
+  bool UseSystemClass{false};
+  bool UseSystemCursor{true};
+  win32::DWord WindowStyles{CControlWinTraits::GetWndStyle(0)};
+  win32::DWord WindowExStyles{CControlWinTraits::GetWndExStyle(0)};
+  WNDPROC WindowProc{nullptr};
+
+  ComponentCreationParameters()
     {
       this->generateClassName();
     }
 
     ComponentCreationParameters(const ATL::CWndClassInfo& atlClsInfo)
-      : atom_(atlClsInfo.m_atom),
-      BackgroundBrush(atlClsInfo.m_wc.hbrBackground),
-      ClassName(atlClsInfo.m_wc.lpszClassName),
-      ClassStyles(atlClsInfo.m_wc.style),
-      CursorId(atlClsInfo.m_lpszCursorID),
-      BaseClassName(atlClsInfo.m_lpszOrigName == NULL ? String() 
-        : atlClsInfo.m_lpszOrigName),
-      UseSystemClass(false),
-      UseSystemCursor(atlClsInfo.m_bSystemCursor == TRUE ? true : false),
-      WindowStyles(CControlWinTraits::GetWndStyle(0)),
-      WindowExStyles(CControlWinTraits::GetWndExStyle(0)),
-      WindowProc(atlClsInfo.m_wc.lpfnWndProc)
+    : atom_{atlClsInfo.m_atom},
+    background_brush_{atlClsInfo.m_wc.hbrBackground},
+    class_name_{jvs::Narrow(atlClsInfo.m_wc.lpszClassName)},
+    class_name_buffer_{atlClsInfo.m_wc.lpszClassName},
+    class_styles_{atlClsInfo.m_wc.style},
+    cursor_id_{atlClsInfo.m_lpszCursorID},
+    base_class_name_{atlClsInfo.m_lpszOrigName == nullptr ? std::string()
+      : jvs::Narrow(atlClsInfo.m_lpszOrigName)},
+    base_class_name_buffer_{atlClsInfo.m_lpszOrigName == nullptr ?
+      std::wstring() : atlClsInfo.m_lpszOrigName},
+    UseSystemCursor{atlClsInfo.m_bSystemCursor == TRUE ? true : false},
+    WindowProc{atlClsInfo.m_wc.lpfnWndProc}
+  {
+  }
+
+  ComponentCreationParameters(const ComponentCreationParameters& rhs) = default;
+
+  uitk::win32::Atom atom() const
+  {
+    return this->atom_;
+  }
+
+  win32::BrushHandle background_brush() const
+  {
+    return this->background_brush_;
+  }
+
+  win32::BrushHandle& background_brush()
+  {
+    return this->background_brush_;
+  }
+
+  ComponentCreationParameters& background_brush(win32::BrushHandle& outValue)
+  {
+    outValue = this->background_brush_;
+    return *this;
+  }
+
+  ComponentCreationParameters& set_background_brush(
+    const win32::BrushHandle& value)
+  {
+    this->background_brush_ = value;
+    return *this;
+  }
+
+  ComponentCreationParameters& set_background_brush(win32::BrushHandle&& value)
     {
+    this->background_brush_ = std::move(value);
+    return *this;
     }
 
-    ComponentCreationParameters(const ComponentCreationParameters& rhs)
-      : atom_(rhs.atom_),
-      BackgroundBrush(rhs.BackgroundBrush),
-      ClassName(rhs.ClassName),
-      ClassStyles(rhs.ClassStyles),
-      CursorId(rhs.CursorId),
-      BaseClassName(rhs.BaseClassName),
-      UseSystemClass(rhs.UseSystemClass),
-      UseSystemCursor(rhs.UseSystemCursor),
-      WindowStyles(rhs.WindowStyles),
-      WindowExStyles(rhs.WindowExStyles),
-      WindowProc(rhs.WindowProc)
+
+  const std::string& base_class_name() const
     {
+    return this->base_class_name_;
     }
 
-    ATOM atom(void) const
+  ComponentCreationParameters& base_class_name(std::string& outValue)
     {
-      return this->atom_;
+    outValue = this->base_class_name_;
+    return *this;
+  }
+
+  ComponentCreationParameters& set_base_class_name(const std::string& value)
+  {
+    this->base_class_name_ = value;
+    this->base_class_name_buffer_ = jvs::Widen(this->base_class_name_);
+    return *this;
+  }
+
+  ComponentCreationParameters& set_base_class_name(std::string&& value)
+  {
+    this->base_class_name_ = std::move(value);
+    this->base_class_name_buffer_ = jvs::Widen(this->base_class_name_);
+    return *this;
+  }
+
+  const std::wstring& base_class_name_buffer() const
+  {
+    return this->base_class_name_buffer_;
+  }
+
+  ComponentCreationParameters& base_class_name_buffer(std::wstring& outValue)
+  {
+    outValue = this->base_class_name_buffer_;
+    return *this;
+  }
+
+  const std::string& class_name() const
+  {
+    return this->class_name_;
+  }
+
+  ComponentCreationParameters& class_name(std::string& outValue)
+  {
+    outValue = this->class_name_;
+    return *this;
+  }
+
+  ComponentCreationParameters& set_class_name(const std::string& value)
+  {
+    this->class_name_ = value;
+    this->class_name_buffer_ = jvs::Widen(this->class_name_);
+    return *this;
+  }
+
+  ComponentCreationParameters& set_class_name(std::string&& value)
+  {
+    this->class_name_ = std::move(value);
+    this->class_name_buffer_ = jvs::Widen(this->class_name_);
+    return *this;
+  }
+
+  const std::wstring& class_name_buffer() const
+  {
+    return this->class_name_buffer_;
+  }
+
+  ComponentCreationParameters& class_name_buffer(std::wstring& outValue)
+  {
+    outValue = this->class_name_buffer_;
+    return *this;
+  }
+
+  win32::UInt class_styles() const
+  {
+    return this->class_styles_;
+  }
+
+  win32::UInt& class_styles()
+  {
+    return this->class_styles_;
+  }
+
+  ComponentCreationParameters& class_styles(win32::UInt& outValue)
+  {
+    outValue = this->class_styles_;
+    return *this;
+  }
+
+  ComponentCreationParameters& set_class_styles(win32::UInt value)
+  {
+    this->class_styles_ = value;
+    return *this;
     }
 
-    bool GetClassInfo(String baseClassName = "", // value copied on purpose
+  bool GetClassInfo(std::string baseClassName = "", // value copied on purpose
       bool combineClassStyles = false, bool setBaseClassName = true)
     {
-      if (baseClassName.empty())
+    std::wstring baseClassNameBuffer;
+    if (!baseClassName.empty())
       {
-        baseClassName = this->BaseClassName.c_str();
+      baseClassNameBuffer = jvs::Widen(baseClassName);
+    }
+    else
+    {
+      baseClassNameBuffer = this->base_class_name_buffer_;
       }
 
-      assert(!baseClassName.empty());
+    assert(!baseClassNameBuffer.empty());
 
       WNDCLASSEX tempWc;
-      ATOM baseClassAtom = static_cast<ATOM>(::GetClassInfoEx(nullptr, 
-        baseClassName.c_str(), &tempWc));
+    ATOM baseClassAtom = static_cast<ATOM>(::GetClassInfoExW(nullptr,
+      baseClassNameBuffer.c_str(), &tempWc));
       if (baseClassAtom == 0)
       {
-        baseClassAtom = static_cast<ATOM>(::GetClassInfoEx(
-          ::GetModuleHandle(nullptr), baseClassName.c_str(), 
+      baseClassAtom = static_cast<ATOM>(::GetClassInfoExW(
+        ::GetModuleHandleW(nullptr), baseClassNameBuffer.c_str(),
           &tempWc));
         if (baseClassAtom == 0)
         {
@@ -108,16 +220,16 @@ namespace jvs
         }
       }
       
-      this->BackgroundBrush = tempWc.hbrBackground;
-      this->ClassStyles = 
-        (combineClassStyles ? this->ClassStyles | tempWc.style 
+    this->background_brush_ = tempWc.hbrBackground;
+    this->class_styles_ =
+      (combineClassStyles ? this->class_styles_ | tempWc.style
         : tempWc.style) & ~CS_GLOBALCLASS;
       this->WindowProc = tempWc.lpfnWndProc;
 
       return true;
     }
 
-    ATOM Superclass(const String& baseClassName = "", 
+  ATOM Superclass(const std::string& baseClassName = "",
       bool autoGetClassInfo = true, bool combineClassStyles = false)
     {
       // This function is meant to be called BEFORE calling 
@@ -125,10 +237,10 @@ namespace jvs
 
       if (!baseClassName.empty())
       {
-        this->BaseClassName = baseClassName;
+      this->set_base_class_name(baseClassName);
       }
       
-      if (this->BaseClassName.empty())
+    if (this->base_class_name_.empty())
       {
         return this->atom_;
       }
@@ -137,32 +249,32 @@ namespace jvs
 
       if (autoGetClassInfo)
       {
-        this->GetClassInfo(BaseClassName, combineClassStyles, false);
+      this->GetClassInfo(this->base_class_name_, combineClassStyles, false);
         wc = static_cast<WNDCLASSEX>(*this);
       }
 
-      if (this->ClassName.empty())
+    if (this->class_name_.empty())
       {
         this->generateClassName();
       }
 
-      wc.lpszClassName = this->ClassName.c_str();
+    wc.lpszClassName = this->class_name_buffer_.c_str();
 
       WNDCLASSEX tempWc;
       tempWc = wc;
 
       this->atom_ = 
-        static_cast<ATOM>(::GetClassInfoEx(::GetModuleHandle(nullptr), 
-        this->ClassName.c_str(), &tempWc));
+      static_cast<ATOM>(::GetClassInfoExW(::GetModuleHandleW(nullptr),
+        this->class_name_buffer_.c_str(), &tempWc));
 
       if (this->atom_ == 0)
       {
-        this->atom_ = ::RegisterClassEx(&wc);
+      this->atom_ = ::RegisterClassExW(&wc);
         
         // Now that the class has been registered, generate a NEW class
-        // name for ATL to use to register and set BaseClassName to the 
+      // name for ATL to use to register and set base_class_name_ to the 
         // newly registered class name
-        this->BaseClassName = ClassName;
+      this->set_base_class_name(this->class_name_);
         this->generateClassName();
       }
 
@@ -171,40 +283,41 @@ namespace jvs
     }
 
 #if defined (USE_ATL)
-    operator ATL::CWndClassInfo (void) const
+  operator ATL::CWndClassInfo() const
     {
       ATL::CWndClassInfo createParams = 
       {
-        { sizeof(WNDCLASSEX), this->ClassStyles, this->WindowProc,
-          0, 0, nullptr, nullptr, nullptr, this->BackgroundBrush, 
+      { sizeof(WNDCLASSEX), this->class_styles_, this->WindowProc,
+        0, 0, nullptr, nullptr, nullptr, this->background_brush_,
           nullptr, 
-          this->ClassName.empty() ? NULL : this->ClassName.c_str(), 
+        // FIXME: hanging reference
+        this->class_name_.empty() ? NULL : this->class_name_buffer_.c_str(),
           nullptr 
         },
-        this->BaseClassName.empty() ? NULL 
-        : this->BaseClassName.c_str(), nullptr, CursorId, TRUE, 0, 
-        _T("")
+      this->base_class_name_.empty() ? NULL : 
+        this->base_class_name_buffer_.c_str(), 
+      nullptr, cursor_id_, TRUE, 0, _T("")
       };
 
       return createParams;
     }
 #endif
 
-    operator WNDCLASSEX (void) const
+  operator WNDCLASSEXW () const
     {
-      WNDCLASSEX ret = 
+    WNDCLASSEXW ret =
       {
-        sizeof(WNDCLASSEX), this->ClassStyles, this->WindowProc,
-        0, 0, nullptr, nullptr, nullptr, this->BackgroundBrush, nullptr, 
-        this->ClassName.empty() ? nullptr : this->ClassName.c_str(), 
+      sizeof(WNDCLASSEXW), this->class_styles_, this->WindowProc,
+      0, 0, nullptr, nullptr, nullptr, this->background_brush_, nullptr,
+      this->class_name_.empty() ? nullptr : this->class_name_buffer_.c_str(),
         nullptr
       };
 
       return ret;
     }
 
-    static ComponentCreationParameters FromBaseClass(const String& className, 
-      bool setBaseClassName = true)
+  static ComponentCreationParameters FromBaseClass(
+    const std::string& className, bool setBaseClassName = true)
     {
       ComponentCreationParameters ret;
       ret.GetClassInfo(className, false, setBaseClassName);
@@ -213,9 +326,9 @@ namespace jvs
 
     private:
 
-      ATOM atom_;
 
-      void generateClassName(void)
+
+  void generateClassName()
       {
 
         // I almost canceled the whole project because of this stupid 
@@ -243,27 +356,27 @@ namespace jvs
 
 
         GUID guid;
-        StringStream ss;
+    std::stringstream ss{};
         
         if (::CoCreateGuid(&guid) == S_OK)
         {
-          ss << "JutWindow_";
+      ss << "UITKWindow_";
           ss << std::hex << guid.Data1;
           ss << std::hex << guid.Data2;
           ss << std::hex << guid.Data3;
-          ss << std::hex << guid.Data4[0];
-          ss << std::hex << guid.Data4[1];
-          ss << std::hex << guid.Data4[2];
-          ss << std::hex << guid.Data4[3];
-          ss << std::hex << guid.Data4[4];
-          ss << std::hex << guid.Data4[5];
-          ss << std::hex << guid.Data4[6];
-          ss << std::hex << guid.Data4[7];
-          this->ClassName = ss.str();
+      ss << std::hex << static_cast<int>(guid.Data4[0]);
+      ss << std::hex << static_cast<int>(guid.Data4[1]);
+      ss << std::hex << static_cast<int>(guid.Data4[2]);
+      ss << std::hex << static_cast<int>(guid.Data4[3]);
+      ss << std::hex << static_cast<int>(guid.Data4[4]);
+      ss << std::hex << static_cast<int>(guid.Data4[5]);
+      ss << std::hex << static_cast<int>(guid.Data4[6]);
+      ss << std::hex << static_cast<int>(guid.Data4[7]);
+      this->set_class_name(ss.str());
         }
         else
         {
-          static const String kAlphaNum = 
+      static const std::string kAlphaNum =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
           static const int GenClassNameLen = 8;
           uint32_t seed = 0;
@@ -272,17 +385,20 @@ namespace jvs
           std::memcpy(&seed, &seedValue 
             + (sizeof(seedValue) - sizeof(seed)), sizeof(seed));
           std::srand(seed);
-          ClassName = "JutWindow_";
+      std::string className{"UITKWindow_"};
           for (int i = 0; i < GenClassNameLen; ++i)
           {
-            this->ClassName += kAlphaNum[rand() % (kAlphaNum.length() - 1)];
+        className += kAlphaNum[rand() % (kAlphaNum.length() - 1)];
           }
+
+      this->set_class_name(className);
         }
         
       }
 
   };
 
-}
+} // namespace uitk
+} // namespace jvs
 
 #endif

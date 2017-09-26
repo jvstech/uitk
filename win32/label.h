@@ -1,4 +1,3 @@
-
 #if !defined (JVS_UITK_WIN32_LABEL_H_)
 #define JVS_UITK_WIN32_LABEL_H_
 
@@ -22,7 +21,7 @@ public:
   static Color DefaultBackgroundColor;
   static Color DefaultForegroundColor;
 
-  Label(void) 
+  Label() 
     : Component(), 
     autoSize_(true)
   {
@@ -31,11 +30,11 @@ public:
     this->Initialize();
   }
 
-  virtual ~Label(void)
+  virtual ~Label()
   {
   }
 
-  virtual bool get_AutoSize(void) const
+  virtual bool get_AutoSize() const
   {
     return autoSize_;
   }
@@ -65,7 +64,7 @@ public:
     return *this;
   }
 
-  virtual Label& set_text(const String& text)
+  virtual Label& set_text(const std::string& text)
   {
     Component::set_text(text);
     if (this->autoSize_)
@@ -78,14 +77,14 @@ public:
 
 protected:
 
-  virtual ComponentCreationParameters GetCreationParameters(void) const override
+  virtual ComponentCreationParameters GetCreationParameters() const override
   {
     auto ret = Component::GetCreationParameters();
-    ret.BaseClassName = "Static";
+    ret.set_base_class_name("Static");
     return ret;
   }
 
-  virtual void OnCreated(void)
+  virtual void OnCreated()
   {
     if (this->autoSize_)
     {

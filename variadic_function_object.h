@@ -46,7 +46,7 @@ public:
 	{
 	}
 
-	virtual ~VariadicFunctionObject(void)
+	virtual ~VariadicFunctionObject()
 	{
 	}
 

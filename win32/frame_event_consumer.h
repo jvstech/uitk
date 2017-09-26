@@ -4,7 +4,7 @@
 
 #include <algorithm>
 #include <Windows.h>
-#include <jvs/uitk/event.h>
+#include "jvs/uitk/event.h"
 #include "frame.h"
 #include "message_arguments.h"
 #include "frame_event_arguments.h"
@@ -48,7 +48,7 @@ public:
 	FrameEventHandler& Opened;
 	FrameEventHandler& Restored;
 
-	FrameEventConsumer(void)
+	FrameEventConsumer()
 		: activated_(),
 		closed_(),
 		closing_(),
@@ -88,7 +88,7 @@ public:
 	{
 	}
 
-	virtual ~FrameEventConsumer(void)
+	virtual ~FrameEventConsumer()
 	{
 	}
 

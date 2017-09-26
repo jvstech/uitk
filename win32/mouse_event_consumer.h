@@ -1,12 +1,11 @@
-
 #if !defined (JVS_UITK_WIN32_MOUSE_EVENT_CONSUMER_H_)
 #define JVS_UITK_WIN32_MOUSE_EVENT_CONSUMER_H_
 
 #include <map>
 #include <utility>
 #include <Windows.h>
-#include <jvs/uitk/event.h>
-#include <jvs/uitk/event_consumer.h>
+#include "jvs/uitk/event.h"
+#include "jvs/uitk/event_consumer.h"
 #include "component.h"
 #include "component_msghandler.h"
 #include "message_arguments.h"
@@ -53,7 +52,7 @@ public:
   MouseEventHandler& Pressed;
   MouseEventHandler& Released;
 
-  MouseEventConsumer(void)
+  MouseEventConsumer()
     : component_(nullptr),
       mouseUpPending(),
       mouseEnterPending(),
@@ -74,7 +73,7 @@ public:
   {
   }
 
-  virtual ~MouseEventConsumer(void)
+  virtual ~MouseEventConsumer()
   {
   }
 
@@ -94,7 +93,7 @@ public:
 
 protected:
 
-  Component* get_Component(void) const
+  Component* get_Component() const
   {
     return this->component_;
   }

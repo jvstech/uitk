@@ -71,7 +71,7 @@ struct CenterHorizontally : Directive<Component&>
 {
 	bool RemoveAnchoring;
 
-	CenterHorizontally(void)
+	CenterHorizontally()
 		: RemoveAnchoring(true)
 	{
 	}

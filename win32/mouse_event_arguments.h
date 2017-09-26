@@ -1,7 +1,7 @@
-
 #if !defined (JVS_UITK_WIN32_MOUSE_EVENT_ARGUMENTS_H_)
 #define JVS_UITK_WIN32_MOUSE_EVENT_ARGUMENTS_H_
 
+#include <chrono>
 #include <Windows.h>
 #include "input_event_arguments.h"
 #include "mouse_button.h"
@@ -36,7 +36,9 @@ struct MouseEventArguments : InputEventArguments
   }
 
   MouseEventArguments(MouseButton button, int clickCount, int x, int y)
-    : InputEventArguments(::GetTickCount64(), Keyboard::Shift(), Keyboard::Ctrl(),
+    : InputEventArguments(
+      static_cast<long>(std::chrono::high_resolution_clock::now()
+        .time_since_epoch().count()), Keyboard::Shift(), Keyboard::Ctrl(),
     Keyboard::Alt()),
     Button(button), 
     ClickCount(clickCount), 

@@ -23,17 +23,19 @@
 # include <atlwin.h>
 #endif
 
-#include <vector>
-#include <set>
-#include <memory>
 #include <algorithm>
+#include <cassert>
+#include <chrono>
+#include <cstdint>
+#include <memory>
 #include <map>
 #include <functional>
 #include <cstdlib>
 #include <ctime>
-#include <cstdint>
-#include <cassert>
+#include <set>
+#include <vector>
 
+#include "jvs/uitk/win32/component_wndproc.h"
 #include <jvs/base/types.h>
 #include <jvs/uitk/win32/types.h>
 #include "component_msghandler.h"
@@ -59,7 +61,7 @@
 #include <jvs/uitk/smart_ptr_compare.h>
 #include "default_layout.h"
 
-#include <jvs/debugging/debugkit.h>
+#include <jvs/debugkit/debugkit.h>
 
 
 
@@ -81,7 +83,7 @@ class ComponentBase { };
 
 class Component;
 
-typedef EventProvider<Component, MessageArguments> ComponentEventProvider;
+using ComponentEventProvider = EventProvider<Component, MessageArguments>;
 
 class Component :
   // TODO: custom thunk base
@@ -102,13 +104,13 @@ public:
 
 private:
   // name of the component
-  String name_;
+  std::string name_{Component::GenerateName()};
   // components owned by this one
-  OwnedComponentCollection components_;
+  OwnedComponentCollection components_{};
   // the component that owns this one
-  mutable Component* parent_;
+  mutable Component* parent_{nullptr};
   // index of this component in its parent's child list
-  int index_;
+  int index_{-1};
   // left coordinate
   int x_;
   // top coordinate
@@ -121,8 +123,9 @@ private:
   int client_width_;
   // height of the user-interactive area
   int client_height_;
-  // default size of this component
-  String text_;
+  // text displayed for this component
+  std::string text_;
+  std::wstring text_buffer_;
   // color of the component background
   Color background_color_;
   // brush used for coloring the component background
@@ -157,12 +160,8 @@ private:
 
 public:
 
-  Component(void)
-    : name_(Component::GenerateName()),
-    window_state_(0),
-    components_(),
-    parent_(nullptr),
-    index_(-1),
+  Component()
+    : window_state_(0),
     // I was originally using RECTs here to store the size and location
     // but it became too unwieldy. It's easier to recalculate sizes
     // and locations with individual ints using position updates.
@@ -216,7 +215,7 @@ public:
     src.m_hWnd = nullptr;
   }
 
-  virtual ~Component(void)
+  virtual ~Component()
   {
     if (this->IsCreated())
     {
@@ -227,8 +226,8 @@ public:
       }
 
       ::DestroyWindow(*this);
-    } // if (this->IsCreated())
-  } // dtor
+    }
+  }
 
   Component& operator=(Component && src)
   {
@@ -256,7 +255,7 @@ public:
     // prevent destruction of window
     src.m_hWnd = nullptr;
     return *this;
-  } // move assignment operator
+  }
 
   /// <summary> Adds a component to this component. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
@@ -324,7 +323,7 @@ public:
   /// <summary> Gets the anchor style. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Anchor style. </returns>
-  AnchorStyles anchor(void) const
+  AnchorStyles anchor() const
   {
     return this->anchor_;
   }
@@ -353,7 +352,7 @@ public:
   /// <summary> Gets the background color. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Background color. </returns>
-  Color background_color(void) const
+  Color background_color() const
   {
     return this->background_color_;
   }
@@ -389,16 +388,16 @@ public:
       if (this->IsCreated())
       {
         ::InvalidateRect(*this, nullptr, TRUE);
-      } // if (this->IsCreated())
-    } // if (backColor != this->background_color_)
+      }
+    }
 
     return *this;
-  } // set_background_color
+  }
 
   /// <summary> Gets the background brush. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Background brush </returns>
-  Brush background_brush(void) const
+  Brush background_brush() const
   {
     return this->background_brush_;
   }
@@ -416,7 +415,7 @@ public:
   /// <summary> Gets the background mode. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Background mode. </returns>
-  BackgroundMode background_mode(void) const
+  BackgroundMode background_mode() const
   {
     return this->background_mode_;
   }
@@ -449,7 +448,7 @@ public:
   /// <summary> Gets the bottom location. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Bottom location. </returns>
-  int bottom(void) const
+  int bottom() const
   {
     TRACEIN_THIS;
     RETURN_TRACE(this->y_ + this->height_);
@@ -482,7 +481,7 @@ public:
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> The distance from the bottom of this component to the bottom of
   ///           its parent component. </returns>
-  int bottom_distance(void) const
+  int bottom_distance() const
   {
     TRACEIN;
     if (this->parent_ == nullptr)
@@ -493,7 +492,7 @@ public:
     }
 
     return this->parent_->client_height() - this->bottom();
-  } // bottom_distance
+  }
 
   /// <summary> Get this distance from the bottom of this component to the 
   ///           bottom of its parent component. </summary>
@@ -506,7 +505,7 @@ public:
   {
     bottomDistance = this->bottom_distance();
     return *this;
-  } // bottom_distance
+  }
 
   /// <summary> Sets distance from the bottom of this component to the bottom of
   ///           its parent component by changing this component's height. 
@@ -523,7 +522,7 @@ public:
       this->setBounds(0, 0, 0,
         this->parent_->client_height_ - this->y_ - bottomDistance,
         BoundsChanged::Height);
-    } // if (this->parent_ != nullptr)
+    }
     else
     {
       // TODO: possibly change the height of this component to match the 
@@ -531,12 +530,12 @@ public:
     }
 
     return *this;
-  } // set_bottom_distance
+  }
 
   /// <summary> Gets the bounds of this component. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Bounds of this component. </returns>
-  Rectangle bounds(void) const
+  Rectangle bounds() const
   {
     RECT r = { this->x_, this->y_, this->x_ + this->width_,
       this->y_ + this->height_ };
@@ -594,10 +593,32 @@ public:
     return *this;
   }
 
+  virtual Component& CenterHorizontally()
+  {
+    if (this->parent_ == nullptr)
+    {
+      return *this;
+    }
+
+    this->set_left((this->parent()->client_width() / 2) - (this->width() / 2));
+    return *this;
+  }
+
+  virtual Component& CenterVertically()
+  {
+    if (this->parent_ == nullptr)
+    {
+      return *this;
+    }
+
+    this->set_top((this->parent()->client_height() / 2) - (this->height() / 2));
+    return *this;
+  }
+
   /// <summary> Gets the child components of this component. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> A list of components parented by this component. </returns>
-  const OwnedComponentCollection& components(void) const
+  const OwnedComponentCollection& components() const
   {
     return this->components_;
   }
@@ -606,7 +627,7 @@ public:
   ///           </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Client area height of this component. </returns>
-  virtual int client_height(void) const
+  virtual int client_height() const
   {
     TRACEIN_THIS;
     RETURN_TRACE(this->client_height_);
@@ -639,7 +660,7 @@ public:
   /// <summary> Gets the client rectangle of this component. </summary>
   /// <remarks> Jsmith, 3/23/2014. </remarks>
   /// <returns> Client rectangle of this component. </returns>
-  Rectangle client_rectangle(void) const
+  Rectangle client_rectangle() const
   {
     RECT ret = { 0, 0, this->client_width_, this->client_height_ };
     return ret;
@@ -659,7 +680,7 @@ public:
   /// <summary> Gets the client area size of this component. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Client area size of this component. </returns>
-  Point client_size(void) const
+  Point client_size() const
   {
     POINT ret = { this->client_width_, this->client_height_ };
     return ret;
@@ -717,7 +738,7 @@ public:
   /// <summary> Gets the client area width. </summary>
   /// <remarks> Jsmith, 12/22/2013. </remarks>
   /// <returns> Client area width. </returns>
-  virtual int client_width(void) const
+  virtual int client_width() const
   {
     TRACEIN_THIS;
     RETURN_TRACE(this->client_width_);
@@ -761,7 +782,7 @@ public:
       {
         return *child;
       }
-    } // for
+    }
 
     return *this;
   }
@@ -856,7 +877,7 @@ public:
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Cursor displayed when the mouse is over this component. 
   ///           </returns>
-  Cursor cursor(void) const
+  Cursor cursor() const
   {
     return this->cursor_;
   }
@@ -900,7 +921,7 @@ public:
           reinterpret_cast<WPARAM>(this->handle()), HTCLIENT);
       }
 
-    } // if (this->IsCreated())
+    }
 
     if (cursorChanged)
     {
@@ -913,7 +934,7 @@ public:
   /// <summary> Query whether or not this component is enabled. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> true if it enabled, false if not. </returns>
-  bool enabled(void) const
+  bool enabled() const
   {
     return this->getState(ComponentStates::Enabled);
   }
@@ -940,7 +961,7 @@ public:
   /// <summary> Sets cursor focus to this component. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> *this </returns>
-  Component& Focus(void)
+  Component& Focus()
   {
     TRACEIN_THIS;
     this->ensureComponentIsCreated();
@@ -951,7 +972,7 @@ public:
   /// <summary> Gets the font. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Font. </returns>
-  Font font(void) const
+  Font font() const
   {
     return this->font_;
   }
@@ -990,7 +1011,7 @@ public:
   /// <summary> Gets the foreground color. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Foreground color. </returns>
-  Color foreground_color(void) const
+  Color foreground_color() const
   {
     return this->foreground_color_;
   }
@@ -1025,7 +1046,7 @@ public:
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Handle (HWND) to the created component; null (0) if the
   ///           component has not been created. </returns>
-  WindowHandleType handle(void) const
+  WindowHandle handle() const
   {
     // TODO: update this when ATL is removed
     return this->m_hWnd;
@@ -1037,7 +1058,7 @@ public:
   /// <param name="h">  [out] Handle (HWND) to the created component; null (0) 
   ///                   if the component has not been created. </param>
   /// <returns> *this </returns>
-  Component& handle(WindowHandleType& h)
+  Component& handle(WindowHandle& h)
   {
     h = this->handle();
     return *this;
@@ -1046,7 +1067,7 @@ public:
   /// <summary> Gets the height. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Height. </returns>
-  int height(void) const
+  int height() const
   {
     TRACEIN_THIS;
     RETURN_TRACE(this->height_);
@@ -1076,7 +1097,7 @@ public:
   /// <summary> Makes the component invisible. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> *this </returns>
-  Component& Hide(void)
+  Component& Hide()
   {
     this->set_visible(false);
     return *this;
@@ -1086,7 +1107,7 @@ public:
   ///           </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> true if created, false if not. </returns>
-  bool IsCreated(void) const
+  bool IsCreated() const
   {
     return (this->handle() != nullptr);
   }
@@ -1094,7 +1115,7 @@ public:
   /// <summary> Query if this component is focused. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> true if focused, false if not. </returns>
-  virtual bool IsFocused(void) const
+  virtual bool IsFocused() const
   {
     return (this->IsCreated() && (::GetFocus() == *this));
   }
@@ -1102,7 +1123,7 @@ public:
   /// <summary> Query if this component is a top-level window. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> true if top level, false if not. </returns>
-  bool IsTopLevel(void) const
+  bool IsTopLevel() const
   {
     TRACEIN_THIS;
     if (this->IsCreated())
@@ -1119,7 +1140,7 @@ public:
   /// <summary> Gets the left position. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Left position. </returns>
-  int left(void) const
+  int left() const
   {
     TRACEIN_THIS;
     RETURN_TRACE(this->x_);
@@ -1187,7 +1208,7 @@ public:
   /// <summary> Gets the top location. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Top location. </returns>
-  int top(void) const
+  int top() const
   {
     TRACEIN_THIS;
     RETURN_TRACE(this->y_);
@@ -1217,7 +1238,7 @@ public:
   /// <summary> Gets the location. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Location. </returns>
-  Point location(void) const
+  Point location() const
   {
     TRACEIN_THIS;
     POINT ret = { this->x_, this->y_ };
@@ -1276,7 +1297,7 @@ public:
   ///           components that have not been created. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> *this </returns>
-  Component& MoveToBack(void)
+  Component& MoveToBack()
   {
     if (this->IsCreated())
     {
@@ -1290,7 +1311,7 @@ public:
   ///           components that have not been created. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> *this </returns>
-  Component& MoveToFront(void)
+  Component& MoveToFront()
   {
     if (this->IsCreated())
     {
@@ -1303,7 +1324,7 @@ public:
   /// <summary> Gets the internal name. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Name of the component. </returns>
-  String name(void) const
+  std::string name() const
   {
     return this->name_;
   }
@@ -1312,7 +1333,7 @@ public:
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <param name="componentName">  [out] Name of the component. </param>
   /// <returns> *this </returns>
-  Component& name(String& componentName)
+  Component& name(std::string& componentName)
   {
     componentName = this->name_;
     return *this;
@@ -1322,7 +1343,7 @@ public:
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <param name="componentName">  Name of the component. </param>
   /// <returns> *this </returns>
-  Component& set_name(const String& componentName)
+  Component& set_name(const std::string& componentName)
   {
     this->name_ = componentName;
     return *this;
@@ -1331,7 +1352,7 @@ public:
   /// <summary> Gets the parent. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> null if no parent, else the parent Component*. </returns>
-  Component* parent(void) const
+  Component* parent() const
   {
     return this->parent_;
   }
@@ -1398,7 +1419,7 @@ public:
   /// <summary> Repaints the entire component. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> *this </returns>
-  Component& Repaint(void)
+  Component& Repaint()
   {
     if (this->ensureComponentIsCreated())
     {
@@ -1437,7 +1458,7 @@ public:
   /// <summary> Gets the right location. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Right location. </returns>
-  int right(void) const
+  int right() const
   {
     TRACEIN_THIS;
     RETURN_TRACE(this->x_ + this->width_);
@@ -1470,7 +1491,7 @@ public:
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Distance from the right location of this component to the right 
   ///           location of its parent component. </returns>
-  int right_distance(void) const
+  int right_distance() const
   {
     if (this->parent_ == nullptr)
     {
@@ -1515,7 +1536,7 @@ public:
   ///           component to be created if it has not yet been. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> *this </returns>
-  Component& Show(void)
+  Component& Show()
   {
     this->set_visible(true);
     return *this;
@@ -1524,7 +1545,7 @@ public:
   /// <summary> Gets the size. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Size. </returns>
-  Point size(void) const
+  Point size() const
   {
     TRACEIN_THIS;
     POINT ret = { this->width(), this->height() };
@@ -1580,25 +1601,24 @@ public:
   /// <summary> Gets the text. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Text. </returns>
-  String text(void) const
+  std::string text() const
   {
     if (!this->IsCreated())
     {
       return this->text_;
     }
 
-    String buf;
-    buf.resize(::GetWindowTextLength(*this) + 1);
-    int size = ::GetWindowText(*this, &buf[0], buf.size());
+    std::wstring buf(::GetWindowTextLengthW(*this) + 1, 0);
+    int size = ::GetWindowTextW(*this, &buf[0], static_cast<int>(buf.size()));
     buf.resize(size);
-    return buf;
+    return jvs::Narrow(buf);
   }
 
   /// <summary> Gets the text </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <param name="s">  [out] Text. </param>
   /// <returns> *this </returns>
-  Component& text(String& s)
+  Component& text(std::string& s)
   {
     if (!this->IsCreated())
     {
@@ -1606,9 +1626,10 @@ public:
       return *this;
     }
 
-    s.resize(::GetWindowTextLength(*this) + 1);
-    int size = ::GetWindowText(*this, &s[0], s.size());
-    s.resize(size);
+    std::wstring buf(::GetWindowTextLengthW(*this) + 1, 0);
+    int size = ::GetWindowTextW(*this, &buf[0], static_cast<int>(buf.size()));
+    buf.resize(size);
+    s = jvs::Narrow(buf);
     return *this;
   }
 
@@ -1616,17 +1637,18 @@ public:
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <param name="s">  New text. </param>
   /// <returns> *this </returns>
-  Component& set_text(const String& s)
+  Component& set_text(const std::string& s)
   {
     if (this->IsCreated())
     {
-      ::SetWindowText(*this, s.c_str());
+      ::SetWindowTextW(*this, jvs::Widen(s).c_str());
       // SetWindowText raises a WM_SETTEXT message; no need for
       // further processing
       return *this;
     }
 
     this->text_ = s;
+    this->text_buffer_ = jvs::Widen(this->text_);
     return *this;
   }
 
@@ -1634,7 +1656,7 @@ public:
   ///           </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> *this </returns>
-  Component& TransferFocus(void)
+  Component& TransferFocus()
   {
     this->transferFocus(1);
     return *this;
@@ -1644,7 +1666,7 @@ public:
   ///           </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> *this </returns>
-  Component& TransferFocusBackward(void)
+  Component& TransferFocusBackward()
   {
     this->transferFocus(-1);
     return *this;
@@ -1653,7 +1675,7 @@ public:
   /// <summary> Gets the visibility of this component. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> true if visible, false if not. </returns>
-  bool visible(void) const
+  bool visible() const
   {
     if (!this->IsCreated())
     {
@@ -1704,7 +1726,7 @@ public:
   /// <summary> Gets the width. </summary>
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Width. </returns>
-  int width(void) const
+  int width() const
   {
     TRACEIN_THIS;
     RETURN_TRACE(this->width_);
@@ -1737,7 +1759,7 @@ public:
   /// <remarks> Jsmith, 12/24/2013. </remarks>
   /// <returns> Set of all the created components across the application. 
   ///           </returns>
-  static const std::set<OwnedComponent>& GetCreatedComponents(void)
+  static const std::set<OwnedComponent>& GetCreatedComponents()
   {
     return Component::CreatedComponents;
   }
@@ -1750,10 +1772,10 @@ protected:
   virtual void AssignParent(Component* parent)
   {
     this->parent_ = parent;
-  } // AssignParent
+  }
 
   // Modified version of CWindowImpl::Create...
-  virtual WindowHandleType CreateComponent(void)
+  virtual WindowHandle CreateComponent()
   {
     TRACEIN_THIS;
 
@@ -1799,11 +1821,11 @@ protected:
     //  }
     //
 
-    WindowHandleType ret = *this;
+    WindowHandle ret = *this;
     if (!this->IsCreated())
     {
       ATOM atom;
-      WindowHandleType parentHandle = (this->parent_ == nullptr) ? nullptr
+      WindowHandle parentHandle = (this->parent_ == nullptr) ? nullptr
                           : static_cast<HWND>(*this->parent_);
       ATL::_U_MENUorID MenuOrID = 0U;
       LPVOID lpCreateParam = NULL;
@@ -1818,26 +1840,24 @@ protected:
       if (!createParams.UseSystemClass)
       {
         atlClsInfo = createParams;
+        // TODO: use jvs::uitk::win32::ComponentWndProc
         atlClsInfo.m_wc.lpfnWndProc = StartWindowProc;
         atom = atlClsInfo.Register(&m_pfnSuperWindowProc);
+        //atom = this->registerComponent(createParams);
       }
       else
       {
-        if (createParams.ClassName
-            != createParams.BaseClassName)
+        if (createParams.class_name() != createParams.base_class_name())
         {
-          createParams.ClassName =
-            createParams.BaseClassName;
+          createParams.set_class_name(createParams.base_class_name());
         }
 
-        atom = static_cast<ATOM>(::GetClassInfoEx(
-                                   ::GetModuleHandle(nullptr),
-                                   createParams.ClassName.c_str(),
-                                   &atlClsInfo.m_wc));
+        atom = static_cast<ATOM>(::GetClassInfoExW(::GetModuleHandleW(nullptr),
+          createParams.class_name_buffer().c_str(), &atlClsInfo.m_wc));
       }
 
       // Update the local cursor object (if necessary)
-      if (this->cursor_.get_Type() == CursorType::Default)
+      if (this->cursor_.type() == CursorType::Default)
       {
         this->cursor_ = Cursor(atlClsInfo.m_wc.hCursor);
       }
@@ -1890,10 +1910,20 @@ protected:
         // We're about to create the window; let derived components know for
         // last minute modififcations.
         this->OnCreating();
-        ret = ::CreateWindowEx(dwExStyle, MAKEINTATOM(atom), 
-          this->text_.c_str(), dwStyle, this->x_, this->y_, this->width_,
-          this->height_, parentHandle, MenuOrID.m_hMenu, 
-          _AtlBaseModule.GetModuleInstance(), lpCreateParam);
+        ret = ::CreateWindowExW(
+          dwExStyle, 
+          MAKEINTATOM(atom), 
+          jvs::Widen(this->text_).c_str(), 
+          dwStyle, 
+          this->x_, 
+          this->y_, 
+          this->width_,
+          this->height_, 
+          parentHandle, 
+          MenuOrID.m_hMenu, 
+          //_AtlBaseModule.GetModuleInstance(), 
+          ::GetModuleHandleW(nullptr),
+          lpCreateParam);
         if (ret == nullptr)
         {
           auto errCode = ::GetLastError();
@@ -1911,11 +1941,12 @@ protected:
         // last minute modififcations.
         this->OnCreating();
         RECT r = { this->x_, this->y_, this->right(), this->bottom() };
-        ret = ComponentBase::Create(parentHandle, r, this->text_.c_str(), 
-          dwStyle, dwExStyle, MenuOrID, atom, lpCreateParam);
+        ret = ComponentBase::Create(parentHandle, r, 
+          this->text_buffer_.c_str(), dwStyle, dwExStyle, MenuOrID, atom, 
+          lpCreateParam);
       }
 
-      if (ret == NULL)
+      if (ret == nullptr)
       {
         auto errCode = ::GetLastError();
         DBGOUT("Error: ", debug::ErrorToMessage(errCode));
@@ -1934,7 +1965,7 @@ protected:
     this->unhookMouse();
     // set the font
     ::SendMessage(*this, WM_SETFONT, 
-      reinterpret_cast<WPARAM>(static_cast<FontHandleType>(this->font_)),
+      reinterpret_cast<WPARAM>(static_cast<FontHandle>(this->font_)),
       MAKELPARAM(TRUE, 0));
     // create the child components
     for (OwnedComponent & itr : this->components_)
@@ -1946,7 +1977,7 @@ protected:
       }
 
       window.CreateComponent();
-    } // for (OwnedComponent& itr : this->components_)
+    }
 
     // show the component if necessary
     if (this->getState(ComponentStates::Visible))
@@ -1957,47 +1988,47 @@ protected:
       // window for the first time.
       ::ShowWindow(*this, SW_SHOWNORMAL);
       this->OnFirstShown();
-    } // if (this->getState(ComponentStates::Visible))
+    }
 
     return ret;
   }
 
-  virtual ComponentCreationParameters GetCreationParameters(void) const
+  virtual ComponentCreationParameters GetCreationParameters() const
   {
     return this->creation_parameters_;
   }
 
-  virtual Point GetDefaultSize(void) const
+  virtual Point GetDefaultSize() const
   {
     return Point::Zero;
   }
 
   // used by the EventProvider class
-  Component& GetProvider(void) override
+  Component& GetProvider() override
   {
     return *this;
   }
 
   // meant to be overridden by derived classes
-  virtual bool HasMenu(void) const
+  virtual bool HasMenu() const
   {
     return false;
   }
 
   // meant to be called by the constructors of derived components
-  void Initialize(void)
+  void Initialize()
   {
     // set up default sizes
     this->setDefaultSizes();
   }
 
   // Event activators
-  virtual void OnCreating(void) { };
-  virtual void OnCreated(void) { };
+  virtual void OnCreating() { };
+  virtual void OnCreated() { };
   virtual void OnPaint(bool& handled) { }
   virtual void OnRegistering(ComponentCreationParameters& createParams)  { }
   virtual void OnRegistered(const ComponentCreationParameters& createParams) { }
-  virtual void OnFirstShown(void) { }
+  virtual void OnFirstShown() { }
 
   // Window message handlers
   // // // // // // // // //
@@ -2044,6 +2075,8 @@ protected:
     //::DeleteObject(bmMem);
     //::DeleteDC(hdcMem);
     //::InvalidateRect(*this, nullptr, FALSE);
+
+    // FIXME: this is causing flickering *sometimes*... not sure why
     this->drawBackground();
     handled = true;
     return 1;
@@ -2075,22 +2108,27 @@ protected:
   //     hdcWindow = reinterpret_cast<HDC>(msg.wParam);
   //     clip.set_size(this->client_width_, this->client_height_);
   //  }
-  //
+
   //  // Create the back-buffer DC
   //  HDC hdcMem = ::CreateCompatibleDC(hdcWindow);
   //  // Duplicate the component's image
   //  HBITMAP bmMem = ::CreateCompatibleBitmap(hdcWindow, this->width_,
   //    this->height_);
   //  // Copy the bitmap in to the back-buffer
-  //  ::SelectObject(hdcMem, bmMem);
+  //  auto hOld = ::SelectObject(hdcMem, bmMem);
   //  ::FillRect(hdcMem, &clip, this->background_brush_);
   //  // Update only the clipped portion
   //  ::BitBlt(hdcWindow, clip.left, clip.top, clip.width(),
   //    clip.height(), hdcMem, clip.left, clip.top, SRCCOPY);
+  //  ::SelectObject(hdcMem, hOld);
   //  // Cleanup
   //  ::DeleteObject(bmMem);
   //  ::DeleteDC(hdcMem);
+  //  if (dispose)
+  //  {
   //  ::EndPaint(*this, &ps);
+  //  }
+
   //  handled = true;
   //  return defaultResult;
   // }
@@ -2125,19 +2163,19 @@ protected:
     }
     else
     {
-      //if (this->font_.handle() != reinterpret_cast<FontHandleType>(msg.wParam))
+      //if (this->font_.handle() != reinterpret_cast<FontHandle>(msg.wParam))
       //{
-        this->font_ = Font(reinterpret_cast<FontHandleType>(msg.wParam));
+        this->font_ = Font(reinterpret_cast<FontHandle>(msg.wParam));
       //}
     }
 
     return defaultResult;
-  } // WmSetFont
+  }
 
   virtual LRESULT WmSetText(LRESULT defaultResult, MSG& msg, bool& handled)
   {
     // Text is being updated; change it internally
-    this->text_ = reinterpret_cast<LPCTSTR>(msg.lParam);
+    this->text_ = jvs::Narrow(reinterpret_cast<const wchar_t*>(msg.lParam));
     return 0;
   }
 
@@ -2156,33 +2194,35 @@ protected:
   {
     static POINT mousePos;
     ::GetCursorPos(&mousePos);
-    MSG msg = { hwnd, uint, wparam, lparam, ::GetTickCount64(), mousePos };
+    MSG msg = { hwnd, uint, wparam, lparam, 
+      static_cast<DWord>(std::chrono::high_resolution_clock::now()
+        .time_since_epoch().count()), mousePos };
     bool handled = false;
 
     if (uint == WM_MOUSEENTER)
     {
       // ee: this->OnMouseEnter();
       bool handledIgnored;  // ignored
-      LRESULT resultIgnored;  // ignored
+      win32::LResult resultIgnored;  // ignored
       MessageArguments e(msg, handledIgnored, resultIgnored);
       this->ProcessEvent(*this, e);
       lresult = 0;
       return TRUE;
-    } // if (uint == WM_MOUSEENTER)
+    }
     else
     {
       lresult = MessageHandler::RouteMessage(lresult, msg, handled);
-      MessageArguments e(msg, handled, lresult);
+      MessageArguments e(msg, handled, reinterpret_cast<LResult&>(lresult));
       this->ProcessEvent(*this, e);
 
       lresult = e.Result;
       handled = e.Handled;
-    } // else [if (uint == WM_MOUSEENTER)]
+    }
 
     return handled;
   }
 
-  virtual void PaintBackgroundColor(void)
+  virtual void PaintBackgroundColor()
   {
     PAINTSTRUCT ps;
     HDC hdcWindow = ::BeginPaint(*this, &ps);
@@ -2256,9 +2296,9 @@ private:
     }
 
     return *this;
-  } // setBounds
+  }
 
-  void setDefaultSizes(void)
+  void setDefaultSizes()
   {
     auto defaultSize = this->GetDefaultSize();
     this->width_ = defaultSize.x;
@@ -2304,10 +2344,10 @@ private:
               {
                 // TODO: update child Z-order
               }
-            } // else [if (!newParentIsValid)]
-          } // if (!(this->IsTopLevel()))
-        } // if (parent != *newParent || (parent == nullptr && !topLevel))
-      } // if (newParent != nullptr
+            }
+          }
+        }
+      }
       else if ((!newParentIsValid && parent == nullptr) && topLevel)
       {
         ::SetParent(*this, nullptr);
@@ -2325,13 +2365,13 @@ private:
       {
         this->background_brush_.Assign(this->background_color_);
         DBGOUT("background_brush_ was null, reset to ",
-               this->background_brush_.get_Value());
+               this->background_brush_.GetValue());
       }
 
       ::SetBkMode(hdc, static_cast<int>(this->background_mode_));
       ::SetBkColor(hdc, this->background_color_);
       ::SetTextColor(hdc, this->foreground_color_);
-      return reinterpret_cast<LRESULT>(this->background_brush_.get_Value());
+      return reinterpret_cast<LRESULT>(this->background_brush_.GetValue());
     }
 
     // this message isn't meant for us (it's meant for one of the child
@@ -2341,7 +2381,7 @@ private:
   }
 
   // This will be used at some point...
-  void drawBackground(void)
+  void drawBackground()
   {
     this->drawBackground(Rectangle(0, 0, this->client_width_, 
       this->client_height_));
@@ -2356,12 +2396,12 @@ private:
     }
   }
 
-  void hookMouse(void)
+  void hookMouse()
   {
     if (WM_MOUSEENTER == -1)
     {
       WM_MOUSEENTER =
-        ::RegisterWindowMessage(TEXT("JutWindowMouseEnter"));
+        ::RegisterWindowMessageW(L"UITKWindowMouseEnter");
     }
 
     if (this->IsCreated()
@@ -2376,7 +2416,7 @@ private:
     }
   }
 
-  void unhookMouse(void)
+  void unhookMouse()
   {
     this->setState(ComponentStates::TrackingMouse, false);
   }
@@ -2393,7 +2433,7 @@ private:
                          : (this->window_state_ & ~static_cast<uint32_t>(state));
   }
 
-  bool ensureComponentIsCreated(void)
+  bool ensureComponentIsCreated()
   {
     bool ret = this->IsCreated();
     if (!ret)
@@ -2402,6 +2442,111 @@ private:
     }
 
     return ret;
+  }
+
+  Atom registerComponent(const ComponentCreationParameters& createParams)
+  {
+    WNDCLASSEXW wndcls = static_cast<WNDCLASSEXW>(createParams);
+    if (!createParams.base_class_name().empty())
+    {
+      if (!::GetClassInfoExW(nullptr,
+        createParams.base_class_name_buffer().c_str(), &wndcls))
+      {
+        if (!::GetClassInfoExW(::GetModuleHandleW(nullptr),
+          createParams.base_class_name_buffer().c_str(), &wndcls))
+        {
+          // TODO: indicate failure to read base window class information
+          return 0;
+        }
+      }
+
+      auto defWndProc = wndcls.lpfnWndProc;
+      wndcls.lpfnWndProc = createParams.WindowProc;
+      wndcls.style &= ~CS_GLOBALCLASS;
+    }
+
+    
+    //template <class T>
+    //ATLINLINE ATOM AtlModuleRegisterWndClassInfoT(
+    //  _In_ _ATL_BASE_MODULE* pBaseModule,
+    //  _In_ _ATL_WIN_MODULE* pWinModule,
+    //  _Inout_updates_(1) typename T::_ATL_WNDCLASSINFO* p,
+    //  _In_ WNDPROC* pProc,
+    //  _Inout_ T)
+    //{
+    //  if (pBaseModule == NULL || pWinModule == NULL || p == NULL || pProc == NULL)
+    //  {
+    //    ATLTRACE(atlTraceWindowing, 0, _T("ERROR : Invalid Arguments to AtlModuleRegisterWndClassInfoT\n"));
+    //    ATLASSERT(0);
+    //    return 0;
+    //  }
+
+    //  if (p->m_atom == 0)
+    //  {
+    //    ATL::CComCritSecLock<ATL::CComCriticalSection> lock(pWinModule->m_csWindowCreate, false);
+    //    if (FAILED(lock.Lock()))
+    //    {
+    //      ATLTRACE(atlTraceWindowing, 0, _T("ERROR : Unable to lock critical section in AtlModuleRegisterWndClassInfoT\n"));
+    //      ATLASSERT(0);
+    //      return 0;
+    //    }
+    //    if (p->m_atom == 0)
+    //    {
+    //      if (p->m_lpszOrigName != NULL)
+    //      {
+    
+    //        ATLASSERT(pProc != NULL);
+    //        typename T::PCXSTR lpsz = p->m_wc.lpszClassName;
+    //        WNDPROC proc = p->m_wc.lpfnWndProc;
+
+    //        typename T::WNDCLASSEX wc;
+    //        wc.cbSize = sizeof(T::WNDCLASSEX);
+    //        // Try global class
+    //        if (!T::GetClassInfoEx(NULL, p->m_lpszOrigName, &wc))
+    //        {
+    //          // try process local
+    //          if (!T::GetClassInfoEx(pBaseModule->m_hInst, p->m_lpszOrigName, &wc))
+    //          {
+    //            ATLTRACE(atlTraceWindowing, 0, _T("ERROR : Could not obtain Window Class information for %Ts\n"), p->m_lpszOrigName);
+    //            return 0;
+    //          }
+    //        }
+    //        p->m_wc = wc;
+    //        p->pWndProc = p->m_wc.lpfnWndProc;
+    //        p->m_wc.lpszClassName = lpsz;
+    //        p->m_wc.lpfnWndProc = proc;
+    //      }
+    //      else
+    //      {
+    //        p->m_wc.hCursor = T::LoadCursor(p->m_bSystemCursor ? NULL : pBaseModule->m_hInstResource,
+    //          p->m_lpszCursorID);
+    //      }
+
+    //      p->m_wc.hInstance = pBaseModule->m_hInst;
+    //      p->m_wc.style &= ~CS_GLOBALCLASS;	// we don't register global classes
+    //      if (p->m_wc.lpszClassName == NULL)
+    //      {
+    //        T::FormatWindowClassName(p->m_szAutoName, _countof(p->m_szAutoName), &p->m_wc);
+    //        p->m_wc.lpszClassName = p->m_szAutoName;
+    //      }
+    //      typename T::WNDCLASSEX wcTemp;
+    //      wcTemp = p->m_wc;
+    //      p->m_atom = static_cast<ATOM>(T::GetClassInfoEx(p->m_wc.hInstance, p->m_wc.lpszClassName, &wcTemp));
+    //      if (p->m_atom == 0)
+    //      {
+    //        p->m_atom = T::RegisterClassEx(pWinModule, &p->m_wc);
+    //      }
+    //    }
+    //  }
+
+    //  if (p->m_lpszOrigName != NULL)
+    //  {
+    //    ATLASSERT(pProc != NULL);
+    //    ATLASSERT(p->pWndProc != NULL);
+    //    *pProc = p->pWndProc;
+    //  }
+    //  return p->m_atom;
+    //}
   }
 
   void transferFocus(int direction)
@@ -2420,7 +2565,7 @@ private:
       return;
     }
 
-    int maxIndex = this->parent_->components_.size();
+    int maxIndex = static_cast<int>(this->parent_->components_.size());
     int nextIndex = this->index_ + (direction >= 0 ? 1 : -1);
     // clamp the index between 0 and maxIndex
     if (nextIndex > maxIndex)
@@ -2435,7 +2580,7 @@ private:
     this->parent_->components_[nextIndex]->Focus();
   }
 
-  void updateBounds(void)
+  void updateBounds()
   {
     TRACEIN_THIS;
 
@@ -2499,18 +2644,18 @@ private:
   }
 
   // resets the index values of each child
-  void updateChildIndicies(void)
+  void updateChildIndicies()
   {
     for (OwnedComponentCollection::size_type i = 0;
       i < this->components_.size(); ++i)
     {
-      this->components_[i]->index_ = i;
+      this->components_[i]->index_ = static_cast<int>(i);
     }
   }
 
   void updateChildIndex(Component& component)
   {
-    component.index_ = (this->components_.size() - 1);
+    component.index_ = static_cast<int>(this->components_.size() - 1);
     try
     {
       HWND prevParent = reinterpret_cast<HWND>(component.parent_);
@@ -2548,7 +2693,7 @@ private:
       clientrect.bottom - clientrect.top);
   }
 
-  void updateAnchorDelta(void)
+  void updateAnchorDelta()
   {
     if (this->parent_ != nullptr)
     {
@@ -2634,7 +2779,7 @@ private:
     ::SetParent(*window, HoldingComponent);
   }
 
-  static HWND GetHoldingHandle(void)
+  static HWND GetHoldingHandle()
   {
     if (!HoldingComponent.IsCreated())
     {
@@ -2645,9 +2790,9 @@ private:
     return HoldingComponent;
   }
 
-  static String GenerateName(void)
+  static std::string GenerateName()
   {
-    StringStream s;
+    std::stringstream s;
     s << "Component" << ++Component::ComponentCount;
     return s.str();
   }

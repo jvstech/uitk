@@ -21,7 +21,7 @@ struct NewComponentCreator
 {
 	template <typename DirectiveT>
 	void operator()(DirectiveT& directive, const Component* anchorComponent, 
-		const String& text, DockPosition posRelativeToAnchor, Point location, 
+		const std::string& text, DockPosition posRelativeToAnchor, Point location,
 		int padding)
 	{
 		// nothing to do; 
@@ -34,7 +34,7 @@ struct NewComponentCreator<Label>
 {
 	template <typename DirectiveT>
 	void operator()(DirectiveT& directive, const Component* anchorComponent, 
-		const String& text, DockPosition posRelativeToAnchor, Point location, 
+		const std::string& text, DockPosition posRelativeToAnchor, Point location,
 		int padding)
 	{
 		static_cast<Label*>(directive.NewComponent.get())->set_AutoSize(true);
@@ -47,7 +47,7 @@ struct NewComponentCreator<Label>
 template <typename ComponentT>
 struct AddNewComponent : Directive<ComponentT&>
 {
-	typedef ComponentT ComponentType;
+	using ComponentType = ComponentT;
 
 	Component::OwnedComponent NewComponent;
 
@@ -55,7 +55,7 @@ struct AddNewComponent : Directive<ComponentT&>
 		// the component to use as a positional reference
 		const Component& anchorComponent,
 		// text
-		const String& text = "",
+		const std::string& text = "",
 		// where to position the new component relative to the anchor component
 		DockPosition posRelativeToAnchor = DockPosition::None,
 		// left
@@ -72,7 +72,7 @@ struct AddNewComponent : Directive<ComponentT&>
 
 	AddNewComponent(
 		// text
-		const String& text = "",
+		const std::string& text = "",
 		// where to position the new component relative to the anchor component
 		DockPosition posRelativeToAnchor = DockPosition::None,
 		// left
@@ -89,17 +89,17 @@ struct AddNewComponent : Directive<ComponentT&>
 
 	void CreateNewComponent(
 		const Component* anchorComponent,
-		const String& text,
+		const std::string& text,
 		DockPosition posRelativeToAnchor,
 		Point location,
 		int padding)
 	{
 		auto& c = *this->NewComponent;
-		c.set_Text(text);
+		c.set_text(text);
 		if (posRelativeToAnchor == DockPosition::None 
 			|| posRelativeToAnchor == DockPosition::All)
 		{
-			c.set_Location(location);
+			c.set_location(location);
 		}
 		else
 		{
@@ -107,28 +107,28 @@ struct AddNewComponent : Directive<ComponentT&>
 			switch (posRelativeToAnchor)
 			{
 			case DockPosition::Left:
-				c.set_Top(anchorComponent->get_Top() + location.y);
-				c.set_Left(anchorComponent->get_Left() - c.get_Left() + location.x - 
+				c.set_top(anchorComponent->top() + location.y);
+				c.set_left(anchorComponent->left() - c.left() + location.x - 
 					padding);
 				// TODO: anchor modification
 				break;
 
 			case DockPosition::Right:
-				c.set_Top(anchorComponent->get_Top() + location.y);
-				c.set_Left(anchorComponent->get_Right() - location.x + padding);
+				c.set_top(anchorComponent->top() + location.y);
+				c.set_left(anchorComponent->right() - location.x + padding);
 				// TODO: anchor modification
 				break;
 
 			case DockPosition::Top:
-				c.set_Top(anchorComponent->get_Top() - c.get_Height() + location.y -
+				c.set_top(anchorComponent->top() - c.height() + location.y -
 					padding);
-				c.set_Left(anchorComponent->get_Left() + location.x);
+				c.set_left(anchorComponent->left() + location.x);
 				// TODO: anchor modification
 				break;
 
 			case DockPosition::Bottom:
-				c.set_Top(anchorComponent->get_Bottom() + location.y + padding);
-				c.set_Left(anchorComponent->get_Left() + location.x);
+				c.set_top(anchorComponent->bottom() + location.y + padding);
+				c.set_left(anchorComponent->left() + location.x);
 				// TODO: anchor modification
 				break;
 			}
@@ -143,7 +143,7 @@ struct AddNewComponent : Directive<ComponentT&>
 	ResultType operator()(Component& host)
 	{
 		auto& ret = static_cast<ResultType>(host.AddAndReturn(this->NewComponent));
-		ret.set_Visible(true);
+		ret.set_visible(true);
 		return ret;
 	}
 }; // struct AddNewComponent

@@ -4,6 +4,8 @@
 
 #include <windows.h>
 
+#include "jvs/uitk/win32/types.h"
+
 namespace jvs
 {
 namespace uitk
@@ -15,23 +17,23 @@ class SimpleMessageLoop
 {
 public:
 
-	SimpleMessageLoop(void)
+	SimpleMessageLoop()
 	{
 	}
 
-	virtual ~SimpleMessageLoop(void)
+	virtual ~SimpleMessageLoop()
 	{
 	}
 
-	static int Run(void)
+	static WParam Run()
 	{
 		MSG msg;
-		while (GetMessage(&msg, NULL, 0, 0))
+		while (GetMessageW(&msg, NULL, 0, 0))
 		{
 			/*if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 			{*/
 			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			DispatchMessageW(&msg);
 			/*}*/
 		}
 

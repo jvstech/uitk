@@ -22,11 +22,11 @@ public:
   {
   }
 
-  virtual ~EventArguments(void)
+  virtual ~EventArguments()
   {
   }
 
-  virtual ArgT get_Value(void) const
+  virtual ArgT get_Value() const
   {
     return this->arg_;
   }

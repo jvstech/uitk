@@ -43,7 +43,7 @@ public:
   // custom window message
   static UINT WM_FIRSTSHOWN;
 
-  Frame(void)
+  Frame()
     : Component(),
     state_(FrameState::Normal),
     prevState_(FrameState::Normal),
@@ -57,11 +57,11 @@ public:
     this->Initialize();
   }
 
-  virtual ~Frame(void)
+  virtual ~Frame()
   {
   }
 
-  FrameState::Enum frame_state(void) const
+  FrameState::Enum frame_state() const
   {
     return this->state_;
   }
@@ -87,7 +87,7 @@ public:
     return *this;
   }
 
-  FrameState::Enum frame_state_previous(void) const
+  FrameState::Enum frame_state_previous() const
   {
     return this->prevState_;
   }
@@ -100,7 +100,7 @@ public:
 
 protected:
 
-  ComponentCreationParameters GetCreationParameters(void) const override
+  ComponentCreationParameters GetCreationParameters() const override
   {
     auto createParams = Component::GetCreationParameters();
     createParams.WindowStyles = Frame::Style;
@@ -108,17 +108,17 @@ protected:
     return createParams;
   }
 
-  Point GetDefaultSize(void) const override
+  Point GetDefaultSize() const override
   {
     return Point(300, 300);
   }
 
-  Frame& GetProvider(void) override
+  Frame& GetProvider() override
   {
     return *this;
   }
 
-  virtual void OnCreated(void)
+  virtual void OnCreated()
   {
     if (Frame::WM_FIRSTSHOWN == ~0)
     {
@@ -127,7 +127,7 @@ protected:
     }
   }
 
-  virtual void OnFirstShown(void)
+  virtual void OnFirstShown()
   {
     ::SendMessage(*this, WM_FIRSTSHOWN, 0, 0);
   }
@@ -169,7 +169,7 @@ private:
     return 0;
   }
 
-  void updateFrameState(void) 
+  void updateFrameState() 
   {
     if (this->IsCreated())
     { 

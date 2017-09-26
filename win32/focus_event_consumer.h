@@ -4,8 +4,8 @@
 
 #include <algorithm>
 #include <Windows.h>
-#include <jvs/uitk/event.h>
-#include <jvs/uitk/event_consumer.h>
+#include "jvs/uitk/event.h"
+#include "jvs/uitk/event_consumer.h"
 #include "component.h"
 #include "message_arguments.h"
 #include "focus_event_arguments.h"
@@ -36,7 +36,7 @@ public:
   FocusEventHandler& Gained;
   FocusEventHandler& Lost;
   
-  FocusEventConsumer(void)
+  FocusEventConsumer()
     : gained_(),
     lost_(),
     Gained(gained_),
@@ -44,7 +44,7 @@ public:
   {
   }
 
-  virtual ~FocusEventConsumer(void)
+  virtual ~FocusEventConsumer()
   {
   }
 

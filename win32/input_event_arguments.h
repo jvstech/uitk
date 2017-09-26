@@ -2,8 +2,9 @@
 #if !defined (JVS_UITK_WIN32_INPUT_EVENT_ARGUMENTS_H_)
 #define JVS_UITK_WIN32_INPUT_EVENT_ARGUMENTS_H_
 
-#include <vector>
 #include <algorithm>
+#include <iterator>
+#include <vector>
 
 #include <jvs/base/types.h>
 #include "keyboard.h"
@@ -23,7 +24,7 @@ struct InputEventArguments : BasicEventArguments
   bool IsShiftDown;
   bool IsControlDown;
   bool IsAltDown;
-  String ModifierText;
+  std::string ModifierText;
 
   InputEventArguments(long when, bool isShiftDown, bool isControlDown, 
     bool isAltDown)
@@ -34,8 +35,8 @@ struct InputEventArguments : BasicEventArguments
     IsAltDown(isAltDown),
     ModifierText()
   {
-    StringStream modifierText;
-    std::vector<String> modifiers;
+    std::stringstream modifierText;
+    std::vector<std::string> modifiers;
     if (isShiftDown)
     {
       modifiers.push_back("Shift");
@@ -52,7 +53,7 @@ struct InputEventArguments : BasicEventArguments
     }
 
     std::copy(modifiers.begin(), modifiers.end(), 
-      std::ostream_iterator<String, Char>(modifierText, TEXT("+")));
+      std::ostream_iterator<std::string, char>(modifierText, "+"));
     this->ModifierText = modifierText.str();
   }
 

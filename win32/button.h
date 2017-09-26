@@ -17,20 +17,20 @@ class Button : public Component
 {
 public:
 
-  Button(void)
+  Button()
   {
     this->Initialize();
   }
 
-  virtual ~Button(void)
+  virtual ~Button()
   {
   }
 
   // used to manually simulate a click event
-  Button& ProcessClick(void)
+  Button& ProcessClick()
   {
     bool handledIgnored = false;
-    LRESULT resultIgnored = 0;
+    LResult resultIgnored = 0;
     MSG msg = { 0 };
     msg.hwnd = this->handle();
     msg.message = WM_LBUTTONDOWN;
@@ -44,10 +44,10 @@ public:
 
 protected:
 
-  ComponentCreationParameters GetCreationParameters(void) const override
+  ComponentCreationParameters GetCreationParameters() const override
   {
     auto ret = Component::GetCreationParameters();
-    ret.BaseClassName = "Button";
+    ret.set_base_class_name("Button");
     return ret;
   }
 };

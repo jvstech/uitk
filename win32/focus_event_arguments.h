@@ -3,7 +3,7 @@
 #define JVS_UITK_WIN32_FOCUS_EVENT_ARGUMENTS_H_
 
 #include "component.h"
-#include <jvs/uitk/event_arguments.h>
+#include "jvs/uitk/event_arguments.h"
 
 namespace jvs
 {
@@ -18,7 +18,7 @@ struct FocusEventArguments : BasicEventArguments
 
   Component* OppositeComponent;
 
-  FocusEventArguments(void)
+  FocusEventArguments()
     : OppositeComponent(nullptr)
   {
   }
@@ -28,7 +28,7 @@ struct FocusEventArguments : BasicEventArguments
   {
   }
 
-  ~FocusEventArguments(void)
+  ~FocusEventArguments()
   {
   }
 };

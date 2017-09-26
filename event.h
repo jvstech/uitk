@@ -12,16 +12,16 @@
 namespace jvs
 {
 
-template <typename ...ArgsT>
+template <typename... ArgsT>
 class Event
 {
 public:
 
 	// typedefs
-	typedef Event<ArgsT...> Type;
-	typedef std::tuple<ArgsT...> ArgumentTypes;
-	typedef VariadicFunctionObject<void, ArgsT...> ValueType;
-	typedef typename ValueType::FunctionType FunctionType;
+	using Type = Event<ArgsT...>;
+	using ArgumentTypes = std::tuple<ArgsT...>;
+	using ValueType = VariadicFunctionObject<void, ArgsT...>;
+	using FunctionType = typename ValueType::FunctionType;
 
 private:
 
@@ -31,7 +31,7 @@ private:
 
 public:
 
-	Event(void)
+	Event()
 		: funcs_(),
 		lock_()
 	{
@@ -55,7 +55,7 @@ public:
 	{
 	}
 
-	virtual ~Event(void)
+	virtual ~Event()
 	{
 	}
 

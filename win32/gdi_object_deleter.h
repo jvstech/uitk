@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <utility> // for std::pair
 
-#include <jvs/uitk/win32/types.h>
+#include "jvs/uitk/win32/types.h"
 
 namespace jvs
 {
@@ -34,7 +34,7 @@ struct GdiObjectDisposer
 template <typename GdiObjectT>
 struct GdiObjectDeleter
 {
-  typedef GdiObjectT* PointerType;
+  using PointerType = GdiObjectT*;
 
   void operator()(PointerType gdiObject)
   {
@@ -53,12 +53,12 @@ struct GdiObjectDeleter
 };
 
 template <>
-struct GdiObjectDeleter<DeviceContextHandleType>
+struct GdiObjectDeleter<DeviceContextHandle>
 {
-  typedef DeviceContextHandleType* PointerType;
-  WindowHandleType hwnd;
+  using PointerType = DeviceContextHandle*;
+  WindowHandle hwnd;
 
-  GdiObjectDeleter(WindowHandleType wnd)
+  GdiObjectDeleter(WindowHandle wnd)
     : hwnd(wnd)
   {
   }
@@ -75,18 +75,18 @@ struct GdiObjectDeleter<DeviceContextHandleType>
 };
 
 template <>
-struct GdiObjectDeleter<std::pair<DeviceContextHandleType, WindowHandleType>>
+struct GdiObjectDeleter<std::pair<DeviceContextHandle, WindowHandle>>
 {
-  typedef std::pair<DeviceContextHandleType, WindowHandleType> ContextPair;
-  typedef ContextPair* PointerType;
+  using ContextPair = std::pair<DeviceContextHandle, WindowHandle>;
+  using PointerType = ContextPair*;
 
   void operator()(PointerType ctx)
   {
     if (ctx->first != nullptr)
     {
       ::ReleaseDC(
-        ctx->second, // DeviceContextHandleType
-        ctx->first // WindowHandleType
+        ctx->second, // DeviceContextHandle
+        ctx->first // WindowHandle
         );
     }
 

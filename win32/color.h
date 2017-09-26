@@ -4,7 +4,7 @@
 
 #include <cstdint>
 #include <Windows.h>
-#include <jvs/base.h>
+#include "jvs/uitk/base/value_wrapper.h"
 
 namespace jvs
 {
@@ -22,7 +22,7 @@ public:
 
   static const Color Empty;
 
-  Color(void)
+  Color()
     : color_(0)
   {
   }
@@ -42,7 +42,7 @@ public:
   {
   }
 
-  virtual ~Color(void)
+  virtual ~Color()
   {
   }
 
@@ -52,24 +52,25 @@ public:
     return *this;
   }
 
-  COLORREF get_Value(void) const
-  {
-    return this->color_;
-  }
-
-  uint8_t R(void) const
+  uint8_t R() const
   {
     return GetRValue(this->color_);
   }
 
-  uint8_t G(void) const
+  uint8_t G() const
   {
     return GetGValue(this->color_);
   }
 
-  uint8_t B(void) const
+  uint8_t B() const
   {
     return GetBValue(this->color_);
+  }
+
+  // Inherited via ValueWrapper
+  virtual WrappedType GetValue() const override
+  {
+    return this->color_;
   }
 };
 

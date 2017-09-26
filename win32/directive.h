@@ -18,7 +18,7 @@ struct Directive
 {
 	typedef ResultT ResultType;
 	
-	virtual ~Directive(void)
+	virtual ~Directive()
 	{
 	}
 

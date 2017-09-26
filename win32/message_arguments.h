@@ -1,9 +1,8 @@
-
 #if !defined (JVS_UITK_WIN32_MESSAGE_ARGUMENTS_H_)
 #define JVS_UITK_WIN32_MESSAGE_ARGUMENTS_H_
 
-#include <jvs/uitk/win32/types.h>
-#include <jvs/uitk/event_arguments.h>
+#include "jvs/uitk/win32/types.h"
+#include "jvs/uitk/event_arguments.h"
 
 namespace jvs
 {
@@ -15,19 +14,19 @@ namespace win32
 struct MessageArguments : BasicEventArguments
 {
   bool& Handled;
-  Int32ResultType& Result;
+  LResult& Result;
   MessageType Message;
 
-  MessageArguments(MessageType msg, bool& handled, Int32ResultType& result)
+  MessageArguments(MessageType msg, bool& handled, LResult& result)
     : Message(msg),
     Handled(handled),
     Result(result)
   {
   }
 
-  MessageArguments(WindowHandleType handle, UIntType message, 
-    Int16ParameterType wparam, Int32ParameterType lparam, long time, 
-    bool& handled, Int32ResultType& result)
+  MessageArguments(WindowHandle handle, UInt message, 
+    WParam wparam, LParam lparam, long time, 
+    bool& handled, LResult& result)
     : Message(),
     Handled(handled),
     Result(result)
@@ -40,7 +39,7 @@ struct MessageArguments : BasicEventArguments
     ::GetCursorPos(&Message.pt);
   }
 
-  virtual ~MessageArguments(void)
+  virtual ~MessageArguments()
   {
   }
 };

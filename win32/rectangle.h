@@ -3,7 +3,9 @@
 #define JVS_UITK_WIN32_RECTANGLE_H_
 
 #include <algorithm>
+
 #include <windows.h>
+
 #include "point.h"
 
 namespace jvs
@@ -11,7 +13,6 @@ namespace jvs
 namespace uitk
 {
 namespace win32
-
 {
 
 class Rectangle
@@ -20,14 +21,14 @@ private:
   RECT rect_;
 
 public:
-  LONG& left;
-  LONG& x;
-  LONG& top;
-  LONG& y;
-  LONG& right;
-  LONG& bottom;
+  long& left;
+  long& x;
+  long& top;
+  long& y;
+  long& right;
+  long& bottom;
 
-  Rectangle(void)
+  Rectangle()
     : rect_(),
     left(rect_.left),
     x(rect_.left),
@@ -75,29 +76,34 @@ public:
     this->rect_.bottom = y + height;
   }
 
-  virtual ~Rectangle(void)
+  virtual ~Rectangle()
   {
   }
 
-  RECT* operator&(void)
+  RECT* operator&()
   {
     return &this->rect_;
   }
 
-  operator RECT(void) const
+  operator RECT() const
   {
     return this->rect_;
+  }
+
+  operator const RECT*() const
+  {
+    return &this->rect_;
   }
 
   bool operator==(const Rectangle& b)
   {
     return (std::memcmp(&this->rect_, &b.rect_, sizeof(this->rect_)) == 0);
-  } // operator== */
+  }
 
   bool operator!=(const Rectangle& b)
   {
     return (!(this->operator==(b)));
-  } // operator!= */
+  }
 
   Rectangle& operator=(const Rectangle& src)
   {
@@ -108,7 +114,7 @@ public:
     return *this;
   }
 
-  int width(void) const
+  int width() const
   {
     return this->rect_.right - this->rect_.left;
   }
@@ -119,7 +125,7 @@ public:
     return *this;
   }
 
-  int height(void) const
+  int height() const
   {
     return this->rect_.bottom - this->rect_.top;
   }
@@ -174,7 +180,7 @@ public:
     return ret;
   }
 
-  Point location(void) const
+  Point location() const
   {
     return Point(this->rect_.left, this->rect_.top);
   }
@@ -185,7 +191,7 @@ public:
     return *this;
   }
 
-  Point size(void) const
+  Point size() const
   {
     return Point(this->width(), this->height());
   }

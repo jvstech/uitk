@@ -15,18 +15,18 @@ namespace win32
 class Point
 {
 public:
-  typedef POINT ValueType;
-  typedef decltype(std::declval<POINT>().x) CoordinateType;
+  using ValueType = POINT;
+  using CoordinateType = decltype(std::declval<POINT>().x);
 
 private:
-  ValueType point_;
+  ValueType point_{0, 0};
 
 public:
   CoordinateType& x;
   CoordinateType& y;
   static const Point Zero;
 
-  Point(void)
+  Point()
     : point_(),
       x(point_.x),
       y(point_.y)
@@ -56,7 +56,7 @@ public:
     this->point_.y = y;
   }
 
-  ~Point(void)
+  ~Point()
   {
   }
 
@@ -67,12 +67,12 @@ public:
     return *this;
   }
 
-  operator ValueType(void) const
+  operator ValueType() const
   {
     return this->point_;
   }
 
-  ValueType* operator&(void)
+  ValueType* operator&()
   {
     return &this->point_;
   }

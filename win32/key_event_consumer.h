@@ -4,8 +4,8 @@
 
 #include <functional>
 #include <windows.h>
-#include <jvs/uitk/event.h>
-#include <jvs/uitk/event_consumer.h>
+#include "jvs/uitk/event.h"
+#include "jvs/uitk/event_consumer.h"
 #include "component_msghandler.h"
 #include "keyboard.h"
 #include "key_event_arguments.h"
@@ -39,7 +39,7 @@ namespace win32
     KeyEventHandler& KeyUp;
     KeyEventHandler& KeyPress;
 
-    KeyEventConsumer(void)
+    KeyEventConsumer()
       : component_(nullptr),
       keyDownEvent_(),
       keyUpEvent_(),
@@ -50,7 +50,7 @@ namespace win32
     {
     }
 
-    virtual ~KeyEventConsumer(void)
+    virtual ~KeyEventConsumer()
     {
     }
 

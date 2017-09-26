@@ -14,14 +14,14 @@ namespace win32
   {
   public:
 
-    TextBox(void)
+    TextBox()
       : Component()
     {
       this->Initialize();
       this->set_size(100, this->font().GetHeight() + 3);
     }
 
-    virtual ~TextBox(void)
+    virtual ~TextBox()
     {
     }
 
@@ -29,10 +29,10 @@ namespace win32
 
     virtual void OnRegistering(ComponentCreationParameters& createParams)
     {
-      createParams.BaseClassName = WC_EDIT;
+      createParams.set_base_class_name(jvs::Narrow(WC_EDIT));
       createParams.WindowStyles |= ES_AUTOHSCROLL | ES_AUTOVSCROLL; 
       createParams.WindowExStyles |= WS_EX_CLIENTEDGE;
-      createParams.BackgroundBrush = this->background_brush();
+      createParams.set_background_brush(this->background_brush());
     }
 
   };

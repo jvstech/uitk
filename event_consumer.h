@@ -15,7 +15,7 @@ class EventConsumer
 {
 public:
 
-  virtual ~EventConsumer(void)
+  virtual ~EventConsumer()
   {
   }
 

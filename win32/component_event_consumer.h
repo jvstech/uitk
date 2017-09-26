@@ -36,17 +36,17 @@ private:
   ComponentEventHandler resizedEvent_;
 
   // non-copyable
-  ComponentEventConsumer(const ComponentEventConsumer&)
-    : moveEvent_(),
-    hiddenEvent_(),
-    shownEvent_(),
-    resizedEvent_(),
-    Moved(moveEvent_),
-    Hidden(hiddenEvent_),
-    Shown(shownEvent_),
-    Resized(resizedEvent_)
-  {
-  }
+  ComponentEventConsumer(const ComponentEventConsumer&) = delete;
+  //  : moveEvent_(),
+  //  hiddenEvent_(),
+  //  shownEvent_(),
+  //  resizedEvent_(),
+  //  Moved(moveEvent_),
+  //  Hidden(hiddenEvent_),
+  //  Shown(shownEvent_),
+  //  Resized(resizedEvent_)
+  //{
+  //}
   
 public:
   
@@ -55,7 +55,7 @@ public:
   ComponentEventHandler& Shown;
   ComponentEventHandler& Resized;
 
-  ComponentEventConsumer(void)
+  ComponentEventConsumer()
     : moveEvent_(),
     hiddenEvent_(),
     shownEvent_(),
@@ -79,7 +79,7 @@ public:
   {
   }
 
-  virtual ~ComponentEventConsumer(void)
+  virtual ~ComponentEventConsumer()
   {
   }
 

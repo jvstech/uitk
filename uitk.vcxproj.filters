@@ -132,9 +132,6 @@
     <ClInclude Include="event_provider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="flag_states.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="null_deleter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -240,5 +237,28 @@
     <ClInclude Include="win32\size.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
+    <ClInclude Include="win32\types64.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\types32.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\component_wndproc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\value_wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debugging\debugkit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="uitk_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

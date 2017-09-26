@@ -19,10 +19,10 @@ namespace win32
 struct KeyEventArguments : InputEventArguments
 {
   uint32_t KeyCode;
-  Char KeyChar;
-  String KeyText;
+  char KeyChar;
+  std::string KeyText;
 
-  KeyEventArguments(uint32_t keyCode, Char keyChar, String keyText, 
+  KeyEventArguments(uint32_t keyCode, char keyChar, const std::string& keyText,
     bool isShiftDown, bool isControlDown, bool isAltDown, long when)
     : InputEventArguments(when, isShiftDown, isControlDown,
     isAltDown),

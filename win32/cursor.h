@@ -3,11 +3,14 @@
 #define JVS_UITK_WIN32_CURSOR_H_
 
 #include <Windows.h>
-#include <jvs/base/types.h>
-#include <jvs/base/value_wrapper.h>
+
+#include "jvs/uitk/base/string.h"
+#include "jvs/uitk/base/value_wrapper.h"
+#include "jvs/uitk/win32/types.h"
+
 #include "cursor_type.h"
 
-#include <jvs/debugging/debugkit.h>
+#include "jvs/uitk/debugging/debugkit.h"
 
 namespace jvs
 {
@@ -17,12 +20,13 @@ namespace win32
 
 {
 
-class Cursor : public ValueWrapper<HCURSOR>
+class Cursor : public ValueWrapper<CursorHandle>
 {
 private:
-  CursorType type_;
-  String name_;
-  HCURSOR cursor_;
+  CursorType type_{CursorType::Default};
+  std::string name_{};
+  CursorHandle cursor_{nullptr};
+  std::wstring resource_id_{};
 
 public:
   
@@ -45,18 +49,13 @@ public:
   static const Cursor WestResize;
   static const Cursor Wait;
 
-  Cursor(void)
-    : type_(CursorType::Default),
-    name_(),
-    cursor_(nullptr)
+  Cursor()
   {
     this->loadCursor();
   }
 
   Cursor(CursorType cursorType)
-    : type_(cursorType),
-    name_(),
-    cursor_(nullptr)
+    : type_{cursorType}
   {
     if (this->type_ == CursorType::Custom)
     {
@@ -66,25 +65,23 @@ public:
     this->loadCursor();
   }
 
-  Cursor(const String& name)
+  Cursor(const std::string& name)
     : type_(CursorType::Custom),
-    name_(name),
-    cursor_(nullptr)
+    name_(name)
   {
     this->loadCursor();
   }
 
-  Cursor(HCURSOR handle)
+  Cursor(CursorHandle handle)
     : type_(CursorType::Default),
-    name_(),
-    cursor_(CopyCursor(handle))
+    cursor_(Cursor::copyHandle(handle))
   {
   }
 
   Cursor(const Cursor& cursor)
     : type_(cursor.type_),
     name_(cursor.name_),
-    cursor_(cursor.cursor_)
+    cursor_(Cursor::copyHandle(cursor.cursor_))
   {
     // TODO: handle custom created cursors in the future...
   }
@@ -93,16 +90,16 @@ public:
   {
     this->type_ = src.type_;
     this->name_ = src.name_;
-    this->cursor_ = src.cursor_;
+    this->cursor_ = Cursor::copyHandle(src.cursor_);
     return *this;
   }
 
-  CursorType get_Type(void) const
+  CursorType type() const
   {
     return this->type_;
   }
 
-  String get_Name(void) const
+  std::string name() const
   {
     if (this->type_ != CursorType::Custom)
     {
@@ -112,22 +109,23 @@ public:
     return this->name_;
   }
 
-  HCURSOR get_Value(void) const
+  HCURSOR GetValue() const override
   {
     return this->cursor_;
   }
 
-  LPCTSTR GetInternalResourceId(void) const
+  const char* GetInternalResourceId() const
   {
     if (this->type_ != CursorType::Custom)
     {
-      return MAKEINTRESOURCE(static_cast<int>(this->type_));
+      return jvs::Narrow(
+        MAKEINTRESOURCEW(static_cast<int>(this->type_))).c_str();
     }
 
     return this->name_.c_str();
   }
 
-  static Cursor FromResourceId(const String& resourceId)
+  static Cursor FromResourceId(const std::string& resourceId)
   {
 
     if (resourceId.length() < sizeof(int))
@@ -160,18 +158,24 @@ public:
   }
 
 private:
-  void loadCursor(void)
+  void loadCursor()
   {
     if (this->type_ != CursorType::Custom)
     {
-      this->cursor_ = ::LoadCursor(nullptr, 
-        MAKEINTRESOURCE(static_cast<int>(this->type_)));			
+      this->cursor_ = ::LoadCursorW(nullptr,
+        MAKEINTRESOURCEW(static_cast<int>(this->type_)));
     }
     else
     {
-      this->cursor_ = ::LoadCursor(::GetModuleHandle(nullptr),
-        this->name_.c_str());
+      this->cursor_ = ::LoadCursorW(::GetModuleHandleW(nullptr),
+        jvs::Widen(this->name_).c_str());
     }
+  }
+
+  static CursorHandle copyHandle(CursorHandle cursorHandle)
+  {
+    return static_cast<CursorHandle>(::CopyIcon(
+      static_cast<IconHandle>(cursorHandle)));
   }
 
 };

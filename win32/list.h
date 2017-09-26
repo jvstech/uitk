@@ -16,8 +16,8 @@
 
 #include <vector>
 #include <map>
-#include "component.h"
 #include <commctrl.h>
+#include "component.h"
 
 namespace jvs
 {
@@ -29,12 +29,12 @@ namespace win32
   {
   private:
     bool allow_multiple_selections_;
-    std::vector<String> items_;
+    std::vector<std::string> items_;
     std::map<int, bool> selected_;
 
   public:
 
-    List(void) 
+    List() 
       : items_(), 
       allow_multiple_selections_(false)
     {
@@ -43,12 +43,12 @@ namespace win32
       this->Initialize();
     }
 
-    virtual ~List(void)
+    virtual ~List()
     {
     }
 
     // Add function also serves as Insert
-    virtual List& Add(const String& item, int index = -1)
+    virtual List& Add(const std::string& item, int index = -1)
     {
       if (this->items_.empty() || index < 0)
       {
@@ -68,11 +68,11 @@ namespace win32
       return *this;
     }
 
-    virtual bool allow_multiple_selections(void) const
+    virtual bool allow_multiple_selections() const
     {
       if (this->IsCreated())
       {
-        return ((::GetWindowLongPtr(*this, GWL_STYLE) & LBS_EXTENDEDSEL) != 0);
+        return ((::GetWindowLongPtrW(*this, GWL_STYLE) & LBS_EXTENDEDSEL) != 0);
       }
 
       return this->allow_multiple_selections_;
@@ -86,22 +86,22 @@ namespace win32
       {
         if (this->allow_multiple_selections_)
         {
-          ::SetWindowLongPtr(*this, GWL_STYLE, 
-            ::GetWindowLongPtr(*this, GWL_STYLE) | LBS_EXTENDEDSEL);
+          ::SetWindowLongPtrW(*this, GWL_STYLE, 
+            ::GetWindowLongPtrW(*this, GWL_STYLE) | LBS_EXTENDEDSEL);
         }
         else
         {
-          ::SetWindowLongPtr(*this, GWL_STYLE, 
-            ::GetWindowLongPtr(*this, GWL_STYLE) & ~LBS_EXTENDEDSEL);
+          ::SetWindowLongPtrW(*this, GWL_STYLE, 
+            ::GetWindowLongPtrW(*this, GWL_STYLE) & ~LBS_EXTENDEDSEL);
         }
       }
 
       return *this;
     }
 
-    virtual int size(void) const
+    virtual int size() const
     {
-      return this->items_.size();
+      return static_cast<int>(this->items_.size());
     }
 
     virtual List& Deselect(int index)
@@ -110,19 +110,19 @@ namespace win32
       {
         if (this->allow_multiple_selections_)
         {
-          ::SendMessage(*this, LB_SETSEL, static_cast<WPARAM>(FALSE), 
+          ::SendMessageW(*this, LB_SETSEL, static_cast<WPARAM>(FALSE), 
             static_cast<LPARAM>(index));
         }
         else
         {
-          ::SendMessage(*this, LB_SETCURSEL, -1, 0);
+          ::SendMessageW(*this, LB_SETCURSEL, -1, 0);
         }
       }
 
       return *this;
     }
 
-    List& DeselectAll(void)
+    List& DeselectAll()
     {
       return this->Deselect(-1);
     }
@@ -139,7 +139,7 @@ namespace win32
 
       if (this->IsCreated())
       {
-        ::SendMessage(*this, LB_DELETESTRING, index, 0);
+        ::SendMessageW(*this, LB_DELETESTRING, index, 0);
       }
 
       this->items_.erase(this->items_.begin() + index);
@@ -148,7 +148,7 @@ namespace win32
     }
 
     // "item" is passed as a copy to prevent aliasing issues
-    virtual List& Remove(String item)
+    virtual List& Remove(const std::string& item)
     {
       auto result = std::find(this->items_.begin(), this->items_.end(), item);
       if (result != this->items_.end())
@@ -162,7 +162,7 @@ namespace win32
           // whereas the distance method is O(n^2) and
           // I also have no plans on changing the 
           // storage container to a list.
-          ::SendMessage(*this, LB_DELETESTRING, result - items_.begin(), 0);
+          ::SendMessageW(*this, LB_DELETESTRING, result - items_.begin(), 0);
         }
 
         this->items_.erase(result);
@@ -171,7 +171,7 @@ namespace win32
       return *this;
     }
 
-    virtual List& RemoveAll(void)
+    virtual List& RemoveAll()
     {
       this->items_.clear();
       if (this->IsCreated())
@@ -200,7 +200,7 @@ namespace win32
       return *this;
     }
 
-    virtual List& SelectAll(void)
+    virtual List& SelectAll()
     {
       return this->Select(-1);
     }
@@ -208,11 +208,11 @@ namespace win32
 
   protected:
 
-    virtual ComponentCreationParameters GetCreationParameters(void) const 
+    virtual ComponentCreationParameters GetCreationParameters() const 
       override
     {
       auto ret = Component::GetCreationParameters();
-      ret.BaseClassName = WC_LISTBOX;
+      ret.set_base_class_name(jvs::Narrow(WC_LISTBOXW));
       ret.WindowExStyles |= WS_EX_CLIENTEDGE;
       // This *must* be set to allow anchoring and layouts to work properly
       // (otherwise, the component height is fixed to any number divisible by 
@@ -227,7 +227,7 @@ namespace win32
       return ret;
     }
 
-    virtual LRESULT WmChar(LRESULT defaultResult, MSG& msg, bool& handled) 
+    virtual LResult WmChar(LParam defaultResult, MSG& msg, bool& handled) 
       override
     {
       if (msg.wParam == Keyboard::Ctrl(TEXT('a')))

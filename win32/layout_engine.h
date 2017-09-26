@@ -1,4 +1,3 @@
-
 #if !defined (JVS_UITK_WIN32_LAYOUTENGINE_H_)
 #define JVS_UITK_WIN32_LAYOUTENGINE_H_
 
@@ -16,23 +15,23 @@ private:
 	bool suspendLayout_;
 
 public:
-	typedef ComponentT ComponentType;
+	using ComponentType = ComponentT;
 
-	LayoutEngine(void)
+	LayoutEngine()
 		: suspendLayout_(false)
 	{
 	}
 
-	virtual ~LayoutEngine(void)
+	virtual ~LayoutEngine()
 	{
 	}
 
-	void Suspend(void)
+	void Suspend()
 	{
 		this->suspendLayout_ = true;
 	}
 
-	void Resume(void)
+	void Resume()
 	{
 		this->suspendLayout_ = false;
 	}

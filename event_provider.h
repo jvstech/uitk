@@ -29,7 +29,7 @@ private:
 
 public:
 
-  virtual ~EventProvider(void)
+  virtual ~EventProvider()
   {
   }
 
@@ -71,7 +71,7 @@ public:
   }
 
 protected:
-  virtual typename std::vector<ConsumerType>::size_type GetConsumerCount(void) 
+  virtual typename std::vector<ConsumerType>::size_type GetConsumerCount() 
     const
   {
     return this->consumers_.size();
@@ -85,7 +85,7 @@ protected:
     }
   }
 
-  virtual ProviderType& GetProvider(void) = 0;
+  virtual ProviderType& GetProvider() = 0;
   
 };
 

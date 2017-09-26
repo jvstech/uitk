@@ -5,13 +5,14 @@
 #pragma once
 #endif
 
+#include <string>
 #include <vector>
 #include <Windows.h>
-#include <jvs/base/string.h>
+#include "jvs/base/string.h"
 
 namespace jvs
 {
-typedef const std::vector<jvs::String>& ArgList;
+using ArgList = const std::vector<std::string>&;
 }
 
 int Main(jvs::ArgList args);
@@ -20,12 +21,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LPSTR lpCommandLine, int nShowCmd)
 {
   int numArgs = 0;
-  auto commandLineArgs = jvs::String(::GetCommandLine());
-  std::vector<jvs::String> args;
+  auto commandLineArgs = std::wstring(::GetCommandLineW());
+  std::vector<std::string> args{};
   auto argList = ::CommandLineToArgvW(commandLineArgs.c_str(), &numArgs);
+  args.reserve(numArgs);
   for (int i = 0; i < numArgs; ++i)
   {
-    args.push_back(jvs::String(argList[i]));
+    args.push_back(jvs::Narrow(argList[i]));
   }
 
   return Main(args);
