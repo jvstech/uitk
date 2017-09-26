@@ -6,7 +6,7 @@
 #include "component.h"
 #include "label.h"
 #include "directive.h"
-#include <jvs/uitk/dock_position.h>
+#include "jvs/uitk/dock_position.h"
 #include "component_alignment_directives.h"
 
 namespace jvs

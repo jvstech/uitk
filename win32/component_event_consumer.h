@@ -5,12 +5,12 @@
 #include <functional>
 #include <utility>
 #include <windows.h>
-#include <jvs/uitk/event_consumer.h>
+#include "jvs/uitk/event_consumer.h"
 #include "component_msghandler.h"
-#include <jvs/uitk/event_arguments.h>
+#include "jvs/uitk/event_arguments.h"
 #include "message_arguments.h"
 #include "component.h"
-#include <jvs/uitk/event.h>
+#include "jvs/uitk/event.h"
 
 namespace jvs
 {

@@ -4,7 +4,7 @@
 
 #include <cstdint>
 #include <windows.h>
-#include <jvs/base/types.h>
+#include "jvs/uitk/base/string.h"
 //#include "keyboard.h"
 #include "key_state.h"
 #include "input_event_arguments.h"

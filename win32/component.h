@@ -36,32 +36,31 @@
 #include <vector>
 
 #include "jvs/uitk/win32/component_wndproc.h"
-#include <jvs/base/types.h>
-#include <jvs/uitk/win32/types.h>
+#include "jvs/uitk/base/string.h"
+#include "jvs/uitk/win32/types.h"
 #include "component_msghandler.h"
 #include "font.h"
 #include "graphics.h"
-#include <jvs/uitk/event_arguments.h>
+#include "jvs/uitk/event_arguments.h"
 #include "component_creation_parameters.h"
 #include "keyboard.h"
 #include "gdi_object_deleter.h"
-#include <jvs/uitk/component_states.h>
-#include <jvs/uitk/background_mode.h>
+#include "jvs/uitk/component_states.h"
+#include "jvs/uitk/background_mode.h"
 #include "mouse_event_arguments.h"
 #include "mouse_button.h"
-#include <jvs/uitk/bounds_changed.h>
-#include <jvs/uitk/null_deleter.h>
+#include "jvs/uitk/bounds_changed.h"
+#include "jvs/uitk/null_deleter.h"
 #include "brush.h"
 #include "rectangle.h"
-#include <jvs/uitk/win32/point.h>
+#include "jvs/uitk/win32/point.h"
 #include "cursor.h"
-#include <jvs/uitk/event_provider.h>
+#include "jvs/uitk/event_provider.h"
 #include "message_arguments.h"
-#include <jvs/uitk/anchor_styles.h>
-#include <jvs/uitk/smart_ptr_compare.h>
+#include "jvs/uitk/anchor_styles.h"
+#include "jvs/uitk/smart_ptr_compare.h"
 #include "default_layout.h"
-
-#include <jvs/debugkit/debugkit.h>
+#include "jvs/uitk/debugging/debugkit.h"
 
 
 

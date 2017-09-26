@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <Windows.h>
-#include "jvs/base/string.h"
+#include "jvs/uitk/base/string.h"
 
 namespace jvs
 {

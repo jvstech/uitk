@@ -6,9 +6,9 @@
 #include <iterator>
 #include <vector>
 
-#include <jvs/base/types.h>
+#include "jvs/uitk/base/string.h"
 #include "keyboard.h"
-#include <jvs/uitk/event_arguments.h>
+#include "jvs/uitk/event_arguments.h"
 
 namespace jvs
 {

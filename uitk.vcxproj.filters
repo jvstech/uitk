@@ -255,6 +255,9 @@
     <ClInclude Include="debugging\debugkit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="base\environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="uitk_test.cpp">

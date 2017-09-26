@@ -4,7 +4,7 @@
 
 #include "component.h"
 #include "directive.h"
-#include <jvs/uitk/position_alignment.h>
+#include "jvs/uitk/position_alignment.h"
 
 namespace jvs
 {

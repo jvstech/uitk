@@ -124,6 +124,7 @@
     <ClInclude Include="anchor_alignment.h" />
     <ClInclude Include="anchor_styles.h" />
     <ClInclude Include="background_mode.h" />
+    <ClInclude Include="base\environment.h" />
     <ClInclude Include="base\string.h" />
     <ClInclude Include="base\value_wrapper.h" />
     <ClInclude Include="bounds_changed.h" />
