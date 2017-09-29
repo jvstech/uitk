@@ -3,21 +3,18 @@ uitk
 
 Native Windows desktop user interface header-only library
 
-Note: *Requires* the jvs_base headers (https://github.com/jvstech/jvs_base) and the debugkit headers 
-(https://github.com/jvstech/debugkit)
-
 The original goal of this project was to create a user interface library with the following specifications:
 
   1. Ease-of-use equal to that of WinForms and AWT
   2. Usage of modern C++ idioms and code (currently makes heavy use of C++11 language and library features; avoids macros
      and naming prefixes so the code doesn't look anything like MFC or wxWidgets)
-  3. Does not rely on other 3rd party libraries such as Qt*
+  3. Does not rely on other 3rd party libraries such as Qt\*
   4. Is header-only to avoid needing to link to static or shared/dynamic libraries thus allowing use with multiple 
      compilers easily (downside: compile time is increased somewhat)
 
-* Right now, point 3 misses the mark. The code relies on ATL to provide thunk-based window procedures as well as some window 
+\* Right now, point 3 misses the mark. The code relies on ATL to provide thunk-based window procedures as well as some window 
 class registration and creation. The number one goal right now is to remove the reliance on ATL. Instead of thunks, the 
-window procedure handling code will be migrated to GetProp/SetProp with window property atoms.
+window procedure handling code will be migrated to storing the pointer to the window object in extra WNDCLASSEX memory and accessing it through GetWindowLongPtr(). For subclassed windows, I haven't thought of a good solution yet. Originally, the pointer was going to accessed via GetProp/SetProp with window property atoms.
 
 I decided to publish the code now for three reasons:
 
