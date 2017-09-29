@@ -30,237 +30,237 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\brush.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\button.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\color.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\component.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\component_creation.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\component_msghandler.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\cursor.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\font.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\frame.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\graphics.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\keyboard.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\label.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\list.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\point.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\rectangle.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
     <ClInclude Include="win32\sizedstruct.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\win32error.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\uitk.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="uitk.h">
+    <ClInclude Include="include\jvs\uitk\debugging\debugkit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="win32\textbox.h">
+    <ClInclude Include="include\jvs\uitk\win32\application_entry_point.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\component_alignment_directives.h">
+    <ClInclude Include="include\jvs\uitk\win32\brush.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\button.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\color.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\component.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\component_alignment_directives.h">
       <Filter>Header Files\win32\[Directives]</Filter>
     </ClInclude>
-    <ClInclude Include="win32\directive.h">
+    <ClInclude Include="include\jvs\uitk\win32\component_creation.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\component_creation_parameters.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\component_directives.h">
       <Filter>Header Files\win32\[Directives]</Filter>
     </ClInclude>
-    <ClInclude Include="win32\types.h">
+    <ClInclude Include="include\jvs\uitk\win32\component_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\component_msghandler.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="anchor_alignment.h">
+    <ClInclude Include="include\jvs\uitk\win32\component_wndproc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="anchor_styles.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="background_mode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bounds_changed.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="component_states.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="content_alignment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dock_position.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="event_arguments.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="event_consumer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="event_provider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="null_deleter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="position_alignment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="smart_ptr_compare.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="variadic_function_object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\gdi_object_deleter.h">
+    <ClInclude Include="include\jvs\uitk\win32\cursor.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\component_directives.h">
+    <ClInclude Include="include\jvs\uitk\win32\cursor_type.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\default_layout.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\directive.h">
       <Filter>Header Files\win32\[Directives]</Filter>
     </ClInclude>
-    <ClInclude Include="win32\focus_event_arguments.h">
+    <ClInclude Include="include\jvs\uitk\win32\focus_event_arguments.h">
       <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
     </ClInclude>
-    <ClInclude Include="win32\frame_closing_arguments.h">
-      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\frame_close_reason.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\message_arguments.h">
-      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\input_event_arguments.h">
-      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\key_event_arguments.h">
-      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\frame_event_arguments.h">
-      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\frame_state.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\mouse_event_arguments.h">
-      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\mouse_button.h">
-      <Filter>Header Files\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\component_event_consumer.h">
+    <ClInclude Include="include\jvs\uitk\win32\focus_event_consumer.h">
       <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
     </ClInclude>
-    <ClInclude Include="win32\focus_event_consumer.h">
-      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    <ClInclude Include="include\jvs\uitk\win32\font.h">
+      <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\frame_event_consumer.h">
-      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    <ClInclude Include="include\jvs\uitk\win32\frame.h">
+      <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\key_event_consumer.h">
-      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    <ClInclude Include="include\jvs\uitk\win32\frame_close_reason.h">
+      <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\mouse_event_consumer.h">
-      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\mouse_motion_event_consumer.h">
-      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\mouse_wheel_event_consumer.h">
-      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\mouse_wheel_event_arguments.h">
+    <ClInclude Include="include\jvs\uitk\win32\frame_closing_arguments.h">
       <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
     </ClInclude>
-    <ClInclude Include="win32\default_layout.h">
+    <ClInclude Include="include\jvs\uitk\win32\frame_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\frame_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\frame_state.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\layout_engine.h">
+    <ClInclude Include="include\jvs\uitk\win32\frame_states.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\frame_states.h">
+    <ClInclude Include="include\jvs\uitk\win32\gdi_object_deleter.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\key_state.h">
+    <ClInclude Include="include\jvs\uitk\win32\graphics.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\message_id.h">
+    <ClInclude Include="include\jvs\uitk\win32\handle_deleter.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\simple_message_loop.h">
+    <ClInclude Include="include\jvs\uitk\win32\input_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\key_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\key_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\key_state.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\cursor_type.h">
+    <ClInclude Include="include\jvs\uitk\win32\keyboard.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\handle_deleter.h">
+    <ClInclude Include="include\jvs\uitk\win32\label.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\component_creation_parameters.h">
+    <ClInclude Include="include\jvs\uitk\win32\layout_engine.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\application_entry_point.h">
+    <ClInclude Include="include\jvs\uitk\win32\list.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\size.h">
+    <ClInclude Include="include\jvs\uitk\win32\message_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\message_id.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\types64.h">
+    <ClInclude Include="include\jvs\uitk\win32\mouse_button.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\types32.h">
+    <ClInclude Include="include\jvs\uitk\win32\mouse_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\mouse_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\mouse_motion_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\mouse_wheel_event_arguments.h">
+      <Filter>Header Files\win32\[Events]\[Arguments]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\mouse_wheel_event_consumer.h">
+      <Filter>Header Files\win32\[Events]\[Consumers]</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\point.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\component_wndproc.h">
+    <ClInclude Include="include\jvs\uitk\win32\rectangle.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\simple_message_loop.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\size.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\textbox.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\types.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\types32.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\types64.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\uitk.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\win32\win32error.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\base\environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="base\string.h">
+    <ClInclude Include="include\jvs\uitk\base\string.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="base\value_wrapper.h">
+    <ClInclude Include="include\jvs\uitk\base\value_wrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="debugging\debugkit.h">
+    <ClInclude Include="include\jvs\uitk\variadic_function_object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="base\environment.h">
+    <ClInclude Include="include\jvs\uitk\anchor_alignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\anchor_styles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\background_mode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\bounds_changed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\component_states.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\content_alignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\dock_position.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\event_arguments.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\event_consumer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\event_provider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\null_deleter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\position_alignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\smart_ptr_compare.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jvs\uitk\uitk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="uitk_test.cpp">
+    <ClCompile Include="uitk_example.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

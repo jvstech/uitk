@@ -67,10 +67,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\Users\jsmith\Dropbox\Documents\CodeProjects\jvs_0.0.1;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>E:\Users\jsmith\Dropbox\Documents\CodeProjects\jvs_0.0.1;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -121,85 +127,85 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="anchor_alignment.h" />
-    <ClInclude Include="anchor_styles.h" />
-    <ClInclude Include="background_mode.h" />
-    <ClInclude Include="base\environment.h" />
-    <ClInclude Include="base\string.h" />
-    <ClInclude Include="base\value_wrapper.h" />
-    <ClInclude Include="bounds_changed.h" />
-    <ClInclude Include="component_states.h" />
-    <ClInclude Include="content_alignment.h" />
-    <ClInclude Include="debugging\debugkit.h" />
-    <ClInclude Include="dock_position.h" />
-    <ClInclude Include="event.h" />
-    <ClInclude Include="event_arguments.h" />
-    <ClInclude Include="event_consumer.h" />
-    <ClInclude Include="event_provider.h" />
-    <ClInclude Include="null_deleter.h" />
-    <ClInclude Include="position_alignment.h" />
-    <ClInclude Include="smart_ptr_compare.h" />
-    <ClInclude Include="uitk.h" />
-    <ClInclude Include="variadic_function_object.h" />
-    <ClInclude Include="win32\application_entry_point.h" />
-    <ClInclude Include="win32\brush.h" />
-    <ClInclude Include="win32\button.h" />
-    <ClInclude Include="win32\color.h" />
-    <ClInclude Include="win32\component.h" />
-    <ClInclude Include="win32\component_directives.h" />
-    <ClInclude Include="win32\component_event_consumer.h" />
-    <ClInclude Include="win32\component_alignment_directives.h" />
-    <ClInclude Include="win32\component_creation.h" />
-    <ClInclude Include="win32\component_msghandler.h" />
-    <ClInclude Include="win32\component_creation_parameters.h" />
-    <ClInclude Include="win32\component_wndproc.h" />
-    <ClInclude Include="win32\cursor.h" />
-    <ClInclude Include="win32\cursor_type.h" />
-    <ClInclude Include="win32\default_layout.h" />
-    <ClInclude Include="win32\directive.h" />
-    <ClInclude Include="win32\focus_event_arguments.h" />
-    <ClInclude Include="win32\focus_event_consumer.h" />
-    <ClInclude Include="win32\font.h" />
-    <ClInclude Include="win32\frame.h" />
-    <ClInclude Include="win32\frame_close_reason.h" />
-    <ClInclude Include="win32\frame_closing_arguments.h" />
-    <ClInclude Include="win32\frame_event_arguments.h" />
-    <ClInclude Include="win32\frame_event_consumer.h" />
-    <ClInclude Include="win32\frame_state.h" />
-    <ClInclude Include="win32\frame_states.h" />
-    <ClInclude Include="win32\gdi_object_deleter.h" />
-    <ClInclude Include="win32\graphics.h" />
-    <ClInclude Include="win32\handle_deleter.h" />
-    <ClInclude Include="win32\input_event_arguments.h" />
-    <ClInclude Include="win32\keyboard.h" />
-    <ClInclude Include="win32\key_event_arguments.h" />
-    <ClInclude Include="win32\key_event_consumer.h" />
-    <ClInclude Include="win32\key_state.h" />
-    <ClInclude Include="win32\label.h" />
-    <ClInclude Include="win32\layout_engine.h" />
-    <ClInclude Include="win32\list.h" />
-    <ClInclude Include="win32\message_arguments.h" />
-    <ClInclude Include="win32\message_id.h" />
-    <ClInclude Include="win32\mouse_button.h" />
-    <ClInclude Include="win32\mouse_event_arguments.h" />
-    <ClInclude Include="win32\mouse_event_consumer.h" />
-    <ClInclude Include="win32\mouse_motion_event_consumer.h" />
-    <ClInclude Include="win32\mouse_wheel_event_arguments.h" />
-    <ClInclude Include="win32\mouse_wheel_event_consumer.h" />
-    <ClInclude Include="win32\point.h" />
-    <ClInclude Include="win32\rectangle.h" />
-    <ClInclude Include="win32\simple_message_loop.h" />
-    <ClInclude Include="win32\size.h" />
+    <ClInclude Include="include\jvs\uitk\anchor_alignment.h" />
+    <ClInclude Include="include\jvs\uitk\anchor_styles.h" />
+    <ClInclude Include="include\jvs\uitk\background_mode.h" />
+    <ClInclude Include="include\jvs\uitk\base\environment.h" />
+    <ClInclude Include="include\jvs\uitk\base\string.h" />
+    <ClInclude Include="include\jvs\uitk\base\value_wrapper.h" />
+    <ClInclude Include="include\jvs\uitk\bounds_changed.h" />
+    <ClInclude Include="include\jvs\uitk\component_states.h" />
+    <ClInclude Include="include\jvs\uitk\content_alignment.h" />
+    <ClInclude Include="include\jvs\uitk\debugging\debugkit.h" />
+    <ClInclude Include="include\jvs\uitk\dock_position.h" />
+    <ClInclude Include="include\jvs\uitk\event.h" />
+    <ClInclude Include="include\jvs\uitk\event_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\event_consumer.h" />
+    <ClInclude Include="include\jvs\uitk\event_provider.h" />
+    <ClInclude Include="include\jvs\uitk\null_deleter.h" />
+    <ClInclude Include="include\jvs\uitk\position_alignment.h" />
+    <ClInclude Include="include\jvs\uitk\smart_ptr_compare.h" />
+    <ClInclude Include="include\jvs\uitk\uitk.h" />
+    <ClInclude Include="include\jvs\uitk\variadic_function_object.h" />
+    <ClInclude Include="include\jvs\uitk\win32\application_entry_point.h" />
+    <ClInclude Include="include\jvs\uitk\win32\brush.h" />
+    <ClInclude Include="include\jvs\uitk\win32\button.h" />
+    <ClInclude Include="include\jvs\uitk\win32\color.h" />
+    <ClInclude Include="include\jvs\uitk\win32\component.h" />
+    <ClInclude Include="include\jvs\uitk\win32\component_directives.h" />
+    <ClInclude Include="include\jvs\uitk\win32\component_event_consumer.h" />
+    <ClInclude Include="include\jvs\uitk\win32\component_alignment_directives.h" />
+    <ClInclude Include="include\jvs\uitk\win32\component_creation.h" />
+    <ClInclude Include="include\jvs\uitk\win32\component_msghandler.h" />
+    <ClInclude Include="include\jvs\uitk\win32\component_creation_parameters.h" />
+    <ClInclude Include="include\jvs\uitk\win32\component_wndproc.h" />
+    <ClInclude Include="include\jvs\uitk\win32\cursor.h" />
+    <ClInclude Include="include\jvs\uitk\win32\cursor_type.h" />
+    <ClInclude Include="include\jvs\uitk\win32\default_layout.h" />
+    <ClInclude Include="include\jvs\uitk\win32\directive.h" />
+    <ClInclude Include="include\jvs\uitk\win32\focus_event_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\win32\focus_event_consumer.h" />
+    <ClInclude Include="include\jvs\uitk\win32\font.h" />
+    <ClInclude Include="include\jvs\uitk\win32\frame.h" />
+    <ClInclude Include="include\jvs\uitk\win32\frame_close_reason.h" />
+    <ClInclude Include="include\jvs\uitk\win32\frame_closing_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\win32\frame_event_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\win32\frame_event_consumer.h" />
+    <ClInclude Include="include\jvs\uitk\win32\frame_state.h" />
+    <ClInclude Include="include\jvs\uitk\win32\frame_states.h" />
+    <ClInclude Include="include\jvs\uitk\win32\gdi_object_deleter.h" />
+    <ClInclude Include="include\jvs\uitk\win32\graphics.h" />
+    <ClInclude Include="include\jvs\uitk\win32\handle_deleter.h" />
+    <ClInclude Include="include\jvs\uitk\win32\input_event_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\win32\keyboard.h" />
+    <ClInclude Include="include\jvs\uitk\win32\key_event_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\win32\key_event_consumer.h" />
+    <ClInclude Include="include\jvs\uitk\win32\key_state.h" />
+    <ClInclude Include="include\jvs\uitk\win32\label.h" />
+    <ClInclude Include="include\jvs\uitk\win32\layout_engine.h" />
+    <ClInclude Include="include\jvs\uitk\win32\list.h" />
+    <ClInclude Include="include\jvs\uitk\win32\message_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\win32\message_id.h" />
+    <ClInclude Include="include\jvs\uitk\win32\mouse_button.h" />
+    <ClInclude Include="include\jvs\uitk\win32\mouse_event_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\win32\mouse_event_consumer.h" />
+    <ClInclude Include="include\jvs\uitk\win32\mouse_motion_event_consumer.h" />
+    <ClInclude Include="include\jvs\uitk\win32\mouse_wheel_event_arguments.h" />
+    <ClInclude Include="include\jvs\uitk\win32\mouse_wheel_event_consumer.h" />
+    <ClInclude Include="include\jvs\uitk\win32\point.h" />
+    <ClInclude Include="include\jvs\uitk\win32\rectangle.h" />
+    <ClInclude Include="include\jvs\uitk\win32\simple_message_loop.h" />
+    <ClInclude Include="include\jvs\uitk\win32\size.h" />
     <ClInclude Include="win32\sizedstruct.h" />
-    <ClInclude Include="win32\textbox.h" />
-    <ClInclude Include="win32\types.h" />
-    <ClInclude Include="win32\types32.h" />
-    <ClInclude Include="win32\types64.h" />
-    <ClInclude Include="win32\uitk.h" />
-    <ClInclude Include="win32\win32error.h" />
+    <ClInclude Include="include\jvs\uitk\win32\textbox.h" />
+    <ClInclude Include="include\jvs\uitk\win32\types.h" />
+    <ClInclude Include="include\jvs\uitk\win32\types32.h" />
+    <ClInclude Include="include\jvs\uitk\win32\types64.h" />
+    <ClInclude Include="include\jvs\uitk\win32\uitk.h" />
+    <ClInclude Include="include\jvs\uitk\win32\win32error.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="uitk_test.cpp" />
+    <ClCompile Include="uitk_example.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
